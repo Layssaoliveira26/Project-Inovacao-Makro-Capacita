@@ -1,11 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap');
-.tela_login {
+.tela_login, .tela_home {
     display: flex;
     position: relative;
     min-height: 100vh;
     justify-content: center;
     align-items: center;
-    padding: 2rem;
     margin:  0 !important;
 
 }
@@ -70,4 +69,14 @@
     background-color: #13193aa8;
     width: 300px;
     padding: 0.6rem;
+}
+
+@media (max-width: 500px) {
+
+.input_group input {
+    width: 200px;
+    align-items: center;
+    text-align: center;
+    
+}
 }
