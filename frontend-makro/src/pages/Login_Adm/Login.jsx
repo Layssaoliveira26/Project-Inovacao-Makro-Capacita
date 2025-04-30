@@ -12,7 +12,7 @@ function Login() {
                 <input type='email' placeholder='E-mail'/>
                 </div>
                 <div className='input_group'>
-                <input type='password'placeholder='senha'/>
+                <input type='password'placeholder='Senha'/>
                 </div>
                 <button className='enter_btn'>Entrar</button>
             </div>
