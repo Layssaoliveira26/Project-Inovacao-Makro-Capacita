@@ -1,24 +1,31 @@
-import './login.css'
-import Logo from '../../assets/logo_makro.png'
+import { useNavigate } from 'react-router-dom';
+import './login.css';
+import Logo from '../../assets/logo_makro.png';
+
 function Login() {
+    const navigate = useNavigate(); // Hook para navegação
+
+    const handleLogin = () => {
+        navigate('/solucoes_adm'); // Redireciona para a tela de soluções
+    };
+
     return (
         <div className='tela_login'>
             <div className='logo_makro'>
-                <img src={Logo} alt='Makro Logo'></img>
+                <img src={Logo} alt='Makro Logo' />
             </div>
             <div className='bloco_login'>
                 <h2>Login</h2>
                 <div className='input_group'>
-                <input type='email' placeholder='E-mail'/>
+                    <input type='email' placeholder='E-mail' />
                 </div>
                 <div className='input_group'>
-                <input type='password'placeholder='Senha'/>
+                    <input type='password' placeholder='Senha' />
                 </div>
-                <button className='enter_btn'>Entrar</button>
+                <button className='enter_btn' onClick={handleLogin}>Entrar</button>
             </div>
         </div>
-        
-    )
+    );
 }
 
-export default Login
+export default Login;
