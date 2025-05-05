@@ -65,7 +65,6 @@ tbody tr {
     align-items: center;
 }
 
-/* Definindo larguras específicas para cada coluna */
 td {
     padding: 1rem;
     white-space: nowrap;
@@ -77,11 +76,9 @@ td:first-child {
     width: 60px;
     flex-shrink: 0;
     text-align: center;
-    /* Remover qualquer pseudo-elemento ou estilo que possa estar causando o ponto vermelho */
     position: relative;
 }
 
-/* Remover qualquer pseudo-elemento que possa estar causando o ponto vermelho */
 td:first-child::after,
 td:first-child::before {
     display: none !important;

@@ -53,11 +53,9 @@ const Solucoes = () => {
     }
 
     const handleLogout = () => {
-        // Redirecionar para a página de login
         window.location.href = "/login"
     }
 
-    // Função para determinar a classe CSS do status
     const getStatusClass = (status) => {
         switch (status) {
             case "Aprovado":
