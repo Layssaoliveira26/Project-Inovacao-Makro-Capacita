@@ -79,7 +79,7 @@ exports.deleteUsuario = async (req, res) => {
 
   //Login do usuário adm
 exports.loginUsuario = async (req, res) => {
-const {email, senha} = req.body;
+  const {email, senha} = req.body;
 
   try {
     const usuario = await prisma.usuario.findUnique({
