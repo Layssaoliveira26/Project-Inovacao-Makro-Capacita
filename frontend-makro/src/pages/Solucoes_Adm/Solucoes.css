@@ -2,7 +2,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+        "Helvetica Neue", sans-serif;
 }
 
 body {
@@ -13,24 +14,22 @@ body {
 .solutions-container {
     width: 100%;
     min-height: 100vh;
-    padding: 2rem;
+    padding: 1rem;
     background-color: #0a0c1b;
     position: relative;
+    max-width: 1800px;
+    margin: 0 auto;
+}
+
+.logo_makro {
+    position: absolute;
+    top: 20px;
+    left: 20px;
 }
 
 .logo_makro img {
     width: 130px;
     height: auto;
-
-}
-
-.logo_makro {
-    position: absolute;
-    top: 0;
-    left: 20px;
-    margin: 0;
-    padding: 0;
-    margin-top: 20px;
 }
 
 .solutions-container h2 {
@@ -39,12 +38,19 @@ body {
     margin-bottom: 2rem;
     color: white;
     text-align: center;
+    padding-top: 40px;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
 }
 
 table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 0.5rem;
+    table-layout: fixed;
 }
 
 thead {
@@ -57,17 +63,55 @@ tbody tr {
     margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
-    overflow: hidden;
 }
 
 td {
     padding: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 td:first-child {
-    width: 70px;
-    display: flex;
-    justify-content: center;
+    width: 60px;
+    flex-shrink: 0;
+    text-align: center;
+    position: relative;
+}
+
+td:first-child::after,
+td:first-child::before {
+    display: none !important;
+}
+
+td:nth-child(2) {
+    width: 150px;
+    flex-shrink: 0;
+}
+
+td:nth-child(3) {
+    width: 280px;
+    flex-shrink: 0;
+}
+
+td:nth-child(4) {
+    width: 150px;
+    flex-shrink: 0;
+}
+
+td:nth-child(5) {
+    width: 250px;
+    flex-shrink: 0;
+}
+
+td:nth-child(6) {
+    width: 120px;
+    flex-shrink: 0;
+}
+
+td:nth-child(7) {
+    width: 150px;
+    flex-shrink: 0;
 }
 
 td button {
@@ -80,6 +124,14 @@ td button {
     transition: all 0.2s;
     padding: 8px;
     line-height: 0.7;
+    /* Garantir que não haja elementos adicionais */
+    position: relative;
+}
+
+/* Remover qualquer pseudo-elemento do botão */
+td button::after,
+td button::before {
+    display: none !important;
 }
 
 td button:hover {
@@ -87,38 +139,93 @@ td button:hover {
     text-shadow: 0 0 8px rgba(255, 82, 82, 0.4);
 }
 
-td:not(:first-child) {
-    flex: 1;
+td:not(:first-child)::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 0.75rem;
+    color: #a0aec0;
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+}
+
+/* Estilos para o status */
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.status-approved {
+    background-color: rgba(72, 187, 120, 0.2);
+    color: #48bb78;
+}
+
+.status-rejected {
+    background-color: rgba(245, 101, 101, 0.2);
+    color: #f56565;
+}
+
+.status-pending {
+    background-color: rgba(237, 137, 54, 0.2);
+    color: #ed8936;
+}
+
+/* Botão de logout reposicionado */
+.logout-container {
+    position: fixed;
+    bottom: 40px;
+    left: 40px;
+}
+
+.logout-button {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
-td:nth-child(2)::before {
-    content: "Nome:";
-    display: block;
-    font-size: 0.75rem;
-    color: #a0aec0;
-    margin-bottom: 0.25rem;
+.logout-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
-td:nth-child(3)::before {
-    content: "Email:";
-    display: block;
-    font-size: 0.75rem;
-    color: #a0aec0;
-    margin-bottom: 0.25rem;
+/* Seta vermelha para a esquerda */
+.logout-arrow {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    position: relative;
 }
 
-td:nth-child(4)::before {
-    content: "Número:";
-    display: block;
-    font-size: 0.75rem;
-    color: #a0aec0;
-    margin-bottom: 0.25rem;
+.logout-arrow:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 12px;
+    height: 2px;
+    background-color: #e53e3e;
+    transform: translateY(-50%);
 }
 
-td {
-    font-size: 0.9rem;
+.logout-arrow:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 6px;
+    height: 6px;
+    border-left: 2px solid #e53e3e;
+    border-bottom: 2px solid #e53e3e;
+    transform: translateY(-50%) rotate(45deg);
 }
 
 .modal {
@@ -175,6 +282,33 @@ td {
     margin-right: 0.5rem;
 }
 
+.solution-details {
+    margin-bottom: 1.5rem;
+    background-color: #131736;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.detail-row {
+    display: flex;
+    margin-bottom: 0.75rem;
+    align-items: center;
+}
+
+.detail-row:last-child {
+    margin-bottom: 0;
+}
+
+.detail-label {
+    font-size: 0.8rem;
+    color: #a0aec0;
+    width: 150px;
+}
+
+.detail-value {
+    font-size: 0.9rem;
+}
+
 .description-title {
     font-size: 1rem;
     font-weight: 500;
@@ -201,12 +335,17 @@ td {
     cursor: pointer;
 }
 
-@media (max-width: 768px) {
-    .modal-content {
-        max-width: 90%;
-        margin: 0 10px;
+@media (max-width: 1200px) {
+    tbody tr {
+        flex-wrap: wrap;
     }
 
+    td {
+        white-space: normal;
+    }
+}
+
+@media (max-width: 768px) {
     .solutions-container {
         padding: 1rem;
     }
@@ -214,20 +353,25 @@ td {
     tbody tr {
         flex-direction: column;
         align-items: flex-start;
+        padding: 1rem;
     }
 
-    td:not(:first-child) {
-        width: 100%;
-        padding: 0.5rem 1rem;
+    td {
+        width: 100% !important;
+        padding: 0.5rem 0;
+        white-space: normal;
     }
 
     td:first-child {
-        width: 100%;
-        justify-content: flex-start;
+        width: 100% !important;
+        text-align: left;
         padding-bottom: 0;
     }
 
-    .modal {
-        width: 100%;
+    .logout-container {
+        position: static;
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
     }
 }
