@@ -191,6 +191,11 @@ td:not(:first-child)::before {
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s;
+    margin-left: 60%;
+}
+
+span {
+    margin-left: -3px;
 }
 
 .logout-button:hover {
@@ -374,4 +379,6 @@ td:not(:first-child)::before {
         display: flex;
         justify-content: center;
     }
+
+
 }

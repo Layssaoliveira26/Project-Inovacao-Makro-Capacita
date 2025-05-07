@@ -71,6 +71,10 @@
     padding: 0.6rem;
 }
 
+input {
+    color: white;
+}
+
 @media (max-width: 500px) {
 
 .input_group input {

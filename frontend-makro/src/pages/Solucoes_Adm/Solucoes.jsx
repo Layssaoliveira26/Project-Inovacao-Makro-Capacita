@@ -53,7 +53,7 @@ const Solucoes = () => {
     }
 
     const handleLogout = () => {
-        window.location.href = "/login"
+        window.location.href = "/login_adm"
     }
 
     const getStatusClass = (status) => {
