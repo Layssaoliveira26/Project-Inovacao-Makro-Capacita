@@ -4,7 +4,7 @@ const clienteController = require('../controllers/clienteController');
 
 // Definição das rotas
 router.get('/clientes', clienteController.getAllProjects);
-router.post('/clientes', clienteController.createCliente);
+router.post('/clientes', clienteController.createProject);
 router.get('/clientes/:id', clienteController.getClienteById);
 router.put('/clientes/:id', clienteController.updateCliente);
 router.delete('/clientes/:id', clienteController.deleteCliente);

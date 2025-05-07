@@ -126,7 +126,9 @@ exports.Prisma.ClienteScalarFieldEnum = {
   email: 'email',
   telefone: 'telefone',
   descricao: 'descricao',
-  documento: 'documento'
+  documento: 'documento',
+  status: 'status',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.UsuarioScalarFieldEnum = {

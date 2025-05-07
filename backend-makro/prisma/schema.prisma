@@ -15,6 +15,9 @@ model Cliente {
   telefone   String
   descricao  String
   documento  String?
+  status     String? @default("Em análise")
+  createdAt  DateTime? @default(now())
+  //nomeProjeto String?
 }
 
 model Usuario {

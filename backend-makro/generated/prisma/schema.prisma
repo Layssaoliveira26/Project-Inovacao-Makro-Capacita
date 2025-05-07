@@ -9,12 +9,15 @@ datasource db {
 }
 
 model Cliente {
-  id        Int     @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   nome      String
-  email     String  @unique
+  email     String    @unique
   telefone  String
   descricao String
   documento String?
+  status    String?   @default("Em análise")
+  createdAt DateTime? @default(now())
+  //nomeProjeto String?
 }
 
 model Usuario {
