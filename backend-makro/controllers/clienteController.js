@@ -2,7 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 // Listar todos os clientes
-exports.getAllClientes = async (req, res) => {
+exports.getAllProjects = async (req, res) => {
   try {
     const clientes = await prisma.cliente.findMany();
     res.json(clientes);

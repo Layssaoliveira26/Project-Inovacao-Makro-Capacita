@@ -1,15 +1,29 @@
-"use client"
+{/*"use client"*/} 
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import "./Solucoes.css"
 import Logo from "../../assets/logo_makro.png"
+import api from "../../services/api"
 
-const Solucoes = () => {
+{/*const Solucoes = () => {*/}
+function Solucoes(){
     const [selectedSolution, setSelectedSolution] = useState(null)
 
     // Dados fictícios para as soluções com os novos campos
-    const solutions = [
-        {
+    const [solutions, setSolutions] = useState([])
+
+    async function getProjects(){
+        const solutionsFromApi= await api.get('/clientes')
+
+        setSolutions(solutionsFromApi.data)
+    }
+
+    useEffect(() => {
+        getProjects()
+    }, [])
+
+
+        {/*{
             id: 1,
             name: "Juliana Ribeiro",
             email: "juliana.ribeiro@makroengenharia.com",
@@ -41,8 +55,8 @@ const Solucoes = () => {
             receiptDate: "28/04/2025",
             description:
                 "Sistema de monitoramento remoto para equipamentos de construção, permitindo manutenção preventiva e redução de paradas não programadas.",
-        },
-    ]
+        },*/}
+    
 
     const openSolutionDetails = (solution) => {
         setSelectedSolution(solution)
@@ -78,6 +92,7 @@ const Solucoes = () => {
 
             <h2>Soluções</h2>
 
+            {/*Aqui vem o bloco com o elemento da solução do projeto*/}
             <div className="table-wrapper">
                 <table>
                     <thead>
@@ -110,7 +125,8 @@ const Solucoes = () => {
                     </tbody>
                 </table>
             </div>
-
+        {/*Aqui finaliza o bloco de dados de um projeto*/}
+        
             {/* Botão de sair posicionado mais abaixo */}
             <div className="logout-container">
                 <button className="logout-button" onClick={handleLogout}>
