@@ -28,20 +28,16 @@
     margin-bottom: 1rem;
 }
 
+.logo_makro {
+    position: relative;
+    margin-right: 1rem;
+}
 
-.logo_makro img {
+.logo-image {
     width: 130px;
     height: auto;
-
 }
 
-.logo_makro {
-    position: absolute;
-    top: 0;
-    left: -10px;
-    margin: 0;
-    padding: 0;
-}
 
 .enter_btn {
     background-color: #ED1C24;

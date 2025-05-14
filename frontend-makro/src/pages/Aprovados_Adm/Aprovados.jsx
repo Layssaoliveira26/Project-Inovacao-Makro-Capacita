@@ -1,11 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import "./Solucoes.css"
+import "./Aprovados.css"
 import Logo from "../../assets/logo_makro.png"
 import api from "../../services/api"
 
-function Solucoes() {
+function Aprovados() {
     const [selectedSolution, setSelectedSolution] = useState(null)
     const [statusModalOpen, setStatusModalOpen] = useState(false)
     const [currentSolution, setCurrentSolution] = useState(null)
@@ -14,7 +14,6 @@ function Solucoes() {
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState(null)
 
-    // Valores padrão
     const DEFAULT_VALUES = {
         projectName: "*NOME DO PROJETO*",
         status: "Em análise",
@@ -22,15 +21,12 @@ function Solucoes() {
         description: "Descrição não fornecida",
     }
 
-    // Status disponíveis
     const STATUS_OPTIONS = ["Em análise", "Aprovado", "Reprovado"]
 
-    // Puxar projetos do back-end
     async function getProjects() {
         try {
             setIsLoading(true)
             const response = await api.get("/clientes")
-
             const formattedSolutions = response.data.map((cliente) => ({
                 id: cliente.id,
                 name: cliente.nome || "Não informado",
@@ -44,7 +40,11 @@ function Solucoes() {
                 description: cliente.descricao || DEFAULT_VALUES.description,
             }))
 
-            setSolutions(formattedSolutions)
+            const approvedSolutions = formattedSolutions.filter(
+                (sol) => sol.status === "Aprovado"
+            )
+
+            setSolutions(approvedSolutions)
         } catch (err) {
             setError("Erro ao carregar as soluções")
             console.error(err)
@@ -54,7 +54,8 @@ function Solucoes() {
     }
 
     useEffect(() => {
-        //getProjects();
+        // getProjects()
+
         const mockData = [
             {
                 id: 1,
@@ -87,65 +88,48 @@ function Solucoes() {
                 description: "Sistema de monitoramento remoto para equipamentos de construção.",
             },
         ]
-        setSolutions(mockData)
+
+        const approvedMock = mockData.filter((item) => item.status === "Aprovado")
+        setSolutions(approvedMock)
         setIsLoading(false)
     }, [])
 
-    const openSolutionDetails = (solution) => {
-        setSelectedSolution(solution)
-    }
-
-    const closeSolutionDetails = () => {
-        setSelectedSolution(null)
-    }
-
-    const handleLogout = () => {
-        window.location.href = "/login_adm"
-    }
-
-    // Funções para alterar status
+    const openSolutionDetails = (solution) => setSelectedSolution(solution)
+    const closeSolutionDetails = () => setSelectedSolution(null)
+    const handleLogout = () => (window.location.href = "/login_adm")
     const openStatusModal = (solution) => {
         setCurrentSolution(solution)
         setNewStatus(solution.status)
         setStatusModalOpen(true)
     }
-
     const closeStatusModal = () => {
         setStatusModalOpen(false)
         setCurrentSolution(null)
     }
-
-    const handleStatusChange = (e) => {
-        setNewStatus(e.target.value)
-    }
+    const handleStatusChange = (e) => setNewStatus(e.target.value)
 
     const saveStatusChange = async () => {
         try {
-            // Em um ambiente real, você faria uma chamada API aqui
-            // await api.put(`/clientes/${currentSolution.id}`, { status: newStatus });
-
-            // Atualiza o estado local
             const updatedSolutions = solutions.map((solution) =>
-                solution.id === currentSolution.id ? { ...solution, status: newStatus } : solution,
+                solution.id === currentSolution.id
+                    ? { ...solution, status: newStatus }
+                    : solution
             )
 
             setSolutions(updatedSolutions)
 
-            // Se o modal de detalhes estiver aberto com a mesma solução, atualize-o também
-            if (selectedSolution && selectedSolution.id === currentSolution.id) {
+            if (selectedSolution?.id === currentSolution.id) {
                 setSelectedSolution({ ...selectedSolution, status: newStatus })
             }
 
             closeStatusModal()
         } catch (error) {
             console.error("Erro ao atualizar status:", error)
-            // Aqui você poderia mostrar uma mensagem de erro para o usuário
         }
     }
 
     const getStatusClass = (status) => {
-        const statusValue = status || DEFAULT_VALUES.status
-        switch (statusValue) {
+        switch (status) {
             case "Aprovado":
                 return "status-approved"
             case "Reprovado":
@@ -168,10 +152,10 @@ function Solucoes() {
                         <img src={Logo || "/placeholder.svg"} alt="Makro Logo" className="logo-image" />
                     </div>
                     <div className="nav-links-container">
-                        <a href="#" className="nav-link active">
+                        <a href="/solucoes_adm" className="nav-link">
                             Submissões
                         </a>
-                        <a href="/aprovados_adm" className="nav-link">
+                        <a href="/aprovados_adm" className="nav-link active">
                             Projetos em Aprovados
                         </a>
                         <a href="#" className="nav-link">
@@ -190,9 +174,8 @@ function Solucoes() {
                 </div>
             </header>
 
-            <h2>Submissões</h2>
+            <h2>Projetos Aprovados</h2>
 
-            {/* Tabela de soluções */}
             <div className="table-wrapper">
                 <table>
                     <thead>
@@ -213,21 +196,15 @@ function Solucoes() {
                                         +
                                     </button>
                                 </td>
-                                <td className="project-name-cell" data-label="Nome do Projeto:">
-                                    {solution.projectName}
-                                </td>
-                                <td className="phone-cell" data-label="Número:">
-                                    {solution.phone}
-                                </td>
-                                <td className="status-cell" data-label="Status:">
+                                <td className="project-name-cell">{solution.projectName}</td>
+                                <td className="phone-cell">{solution.phone}</td>
+                                <td className="status-cell">
                                     <span className={`status-badge ${getStatusClass(solution.status)}`}>{solution.status}</span>
                                 </td>
-                                <td className="date-cell" data-label="Data de Recebimento:">
-                                    {solution.receiptDate}
-                                </td>
+                                <td className="date-cell">{solution.receiptDate}</td>
                                 <td className="actions-cell">
-                                    <button className="alterar-status-button" onClick={() => openStatusModal(solution)}>
-                                        Alterar status
+                                    <button className="add-to-home-button" onClick={() => addToHomePage(solution)}>
+                                        Adicionar à Tela Inicial
                                     </button>
                                 </td>
                             </tr>
@@ -236,7 +213,6 @@ function Solucoes() {
                 </table>
             </div>
 
-            {/* Botão de sair */}
             <div className="logout-container">
                 <button className="logout-button" onClick={handleLogout}>
                     <span className="logout-arrow"></span>
@@ -244,7 +220,6 @@ function Solucoes() {
                 </button>
             </div>
 
-            {/* Modal de detalhes */}
             {selectedSolution && (
                 <div className="modal">
                     <div className="modal-content">
@@ -252,74 +227,30 @@ function Solucoes() {
                         <button className="close-button" onClick={closeSolutionDetails}>
                             &times;
                         </button>
-                        <div className="solution-details">
-                            <div className="detail-row">
-                                <span className="detail-label">Nome do Cliente:</span>
-                                <span className="detail-value">{selectedSolution.name}</span>
-                            </div>
-                            <div className="detail-row">
-                                <span className="detail-label">Nome do Projeto:</span>
-                                <span className="detail-value">{selectedSolution.projectName}</span>
-                            </div>
-                            <div className="detail-row">
-                                <span className="detail-label">Email</span>
-                                <span className="detail-value">{selectedSolution.email}</span>
-                            </div>
-                            <div className="detail-row">
-                                <span className="detail-label">Status:</span>
-                                <span className={`status-badge ${getStatusClass(selectedSolution.status)}`}>
-                                    {selectedSolution.status}
-                                </span>
-                            </div>
-                            <div className="detail-row">
-                                <span className="detail-label">Data de Recebimento:</span>
-                                <span className="detail-value">{selectedSolution.receiptDate}</span>
-                            </div>
+
+                        <div className="detail-row">
+                            <span className="detail-label">Nome do Projeto:</span>
+                            <span className="detail-value">{selectedSolution.projectName}</span>
                         </div>
+                        <div className="detail-row">
+                            <span className="detail-label">Email</span>
+                            <span className="detail-value">{selectedSolution.email}</span>
+                        </div>
+
                         <div className="description-title">Descrição da proposta</div>
                         <div className="description-box">{selectedSolution.description}</div>
-                    </div>
-                </div>
-            )}
-            {statusModalOpen && currentSolution && (
-                <div className="modal">
-                    <div className="modal-content status-modal">
-                        <h3>Alterar Status</h3>
-                        <button className="close-button" onClick={closeStatusModal}>
-                            &times;
-                        </button>
-                        <div className="status-form">
-                            <div className="status-selection">
-                                <label htmlFor="status-select">Selecione o novo status:</label>
-                                <div className="status-options">
-                                    {STATUS_OPTIONS.map((status) => (
-                                        <label key={status} className="status-option">
-                                            <input
-                                                type="radio"
-                                                name="status"
-                                                value={status}
-                                                checked={newStatus === status}
-                                                onChange={handleStatusChange}
-                                            />
-                                            <span className={`status-badge ${getStatusClass(status)}`}>{status}</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="status-actions">
-                                <button className="cancel-button" onClick={closeStatusModal}>
-                                    Cancelar
-                                </button>
-                                <button className="save-button" onClick={saveStatusChange}>
-                                    Salvar
-                                </button>
-                            </div>
+
+                        <div className="description-title">Imagem do Projeto:</div>
+                        <div className="upload-area">
+                            <input type="file" accept="image/*" />
                         </div>
                     </div>
                 </div>
             )}
+            
+
         </div>
     )
 }
 
-export default Solucoes
+export default Aprovados

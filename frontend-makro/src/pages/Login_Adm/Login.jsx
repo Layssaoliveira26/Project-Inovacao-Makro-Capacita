@@ -23,8 +23,8 @@ function Login() {
 
     return (
         <div className='tela_login'>
-            <div className='logo_makro'>
-                <img src={Logo} alt='Makro Logo' />
+            <div className="logo-container">
+                <img src={Logo || "/placeholder.svg"} alt="Makro Logo" className="logo-image" />
             </div>
             <div className='bloco_login'>
                 <h2>Login</h2>
