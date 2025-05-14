@@ -131,11 +131,11 @@ body {
 }
 
 table {
-    width: 100vh;
+    width: 100vw;
     border-collapse: separate;
     border-spacing: 0 0.5rem;
     table-layout: fixed;
-    display: flex;
+    display: table;
 
 }
 
@@ -153,9 +153,10 @@ tbody tr {
 
 td {
     padding: 1rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    line-height: 1.4;
 }
 
 td:first-child {
