@@ -47,7 +47,7 @@ exports.createProject = async (req, res) => {
   console.log('[DEBUG] Dados recebidos:', req.body);
 
   // Validação dos campos obrigatórios
-  const requiredFields = ['nome', 'email', 'telefone', 'descricao'];
+  const requiredFields = ['nome', 'email', 'telefone', 'descricao', 'nomeProjeto'];
   const missingFields = requiredFields.filter(field => !req.body[field]);
 
   if (missingFields.length > 0) {
@@ -65,6 +65,7 @@ exports.createProject = async (req, res) => {
     telefone: String(req.body.telefone),
     descricao: String(req.body.descricao),
     documento: req.body.documento ? String(req.body.documento) : null,
+    nomeProjeto: String(req.body.nomeProjeto)
     // status e createdAt são preenchidos automaticamente pelo Prisma
   };
 
@@ -94,7 +95,8 @@ exports.createProject = async (req, res) => {
       phone: newProject.telefone,
       description: newProject.descricao,
       receiptDate: formatDate(newProject.createdAt),
-      status: newProject.status || 'Em análise'
+      status: newProject.status || 'Em análise',
+      projectName: newProject.nomeProjeto
     };
 
     return res.status(201).json(formattedResponse);

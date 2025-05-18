@@ -128,7 +128,8 @@ exports.Prisma.ClienteScalarFieldEnum = {
   descricao: 'descricao',
   documento: 'documento',
   status: 'status',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  nomeProjeto: 'nomeProjeto'
 };
 
 exports.Prisma.UsuarioScalarFieldEnum = {

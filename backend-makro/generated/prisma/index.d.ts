@@ -989,6 +989,7 @@ export namespace Prisma {
     documento: string | null
     status: string | null
     createdAt: Date | null
+    nomeProjeto: string | null
   }
 
   export type ClienteMaxAggregateOutputType = {
@@ -1000,6 +1001,7 @@ export namespace Prisma {
     documento: string | null
     status: string | null
     createdAt: Date | null
+    nomeProjeto: string | null
   }
 
   export type ClienteCountAggregateOutputType = {
@@ -1011,6 +1013,7 @@ export namespace Prisma {
     documento: number
     status: number
     createdAt: number
+    nomeProjeto: number
     _all: number
   }
 
@@ -1032,6 +1035,7 @@ export namespace Prisma {
     documento?: true
     status?: true
     createdAt?: true
+    nomeProjeto?: true
   }
 
   export type ClienteMaxAggregateInputType = {
@@ -1043,6 +1047,7 @@ export namespace Prisma {
     documento?: true
     status?: true
     createdAt?: true
+    nomeProjeto?: true
   }
 
   export type ClienteCountAggregateInputType = {
@@ -1054,6 +1059,7 @@ export namespace Prisma {
     documento?: true
     status?: true
     createdAt?: true
+    nomeProjeto?: true
     _all?: true
   }
 
@@ -1152,6 +1158,7 @@ export namespace Prisma {
     documento: string | null
     status: string | null
     createdAt: Date | null
+    nomeProjeto: string | null
     _count: ClienteCountAggregateOutputType | null
     _avg: ClienteAvgAggregateOutputType | null
     _sum: ClienteSumAggregateOutputType | null
@@ -1182,6 +1189,7 @@ export namespace Prisma {
     documento?: boolean
     status?: boolean
     createdAt?: boolean
+    nomeProjeto?: boolean
   }, ExtArgs["result"]["cliente"]>
 
   export type ClienteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1193,6 +1201,7 @@ export namespace Prisma {
     documento?: boolean
     status?: boolean
     createdAt?: boolean
+    nomeProjeto?: boolean
   }, ExtArgs["result"]["cliente"]>
 
   export type ClienteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1204,6 +1213,7 @@ export namespace Prisma {
     documento?: boolean
     status?: boolean
     createdAt?: boolean
+    nomeProjeto?: boolean
   }, ExtArgs["result"]["cliente"]>
 
   export type ClienteSelectScalar = {
@@ -1215,9 +1225,10 @@ export namespace Prisma {
     documento?: boolean
     status?: boolean
     createdAt?: boolean
+    nomeProjeto?: boolean
   }
 
-  export type ClienteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "email" | "telefone" | "descricao" | "documento" | "status" | "createdAt", ExtArgs["result"]["cliente"]>
+  export type ClienteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "email" | "telefone" | "descricao" | "documento" | "status" | "createdAt" | "nomeProjeto", ExtArgs["result"]["cliente"]>
 
   export type $ClientePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Cliente"
@@ -1231,6 +1242,7 @@ export namespace Prisma {
       documento: string | null
       status: string | null
       createdAt: Date | null
+      nomeProjeto: string | null
     }, ExtArgs["result"]["cliente"]>
     composites: {}
   }
@@ -1662,6 +1674,7 @@ export namespace Prisma {
     readonly documento: FieldRef<"Cliente", 'String'>
     readonly status: FieldRef<"Cliente", 'String'>
     readonly createdAt: FieldRef<"Cliente", 'DateTime'>
+    readonly nomeProjeto: FieldRef<"Cliente", 'String'>
   }
     
 
@@ -3053,7 +3066,8 @@ export namespace Prisma {
     descricao: 'descricao',
     documento: 'documento',
     status: 'status',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    nomeProjeto: 'nomeProjeto'
   };
 
   export type ClienteScalarFieldEnum = (typeof ClienteScalarFieldEnum)[keyof typeof ClienteScalarFieldEnum]
@@ -3168,6 +3182,7 @@ export namespace Prisma {
     documento?: StringNullableFilter<"Cliente"> | string | null
     status?: StringNullableFilter<"Cliente"> | string | null
     createdAt?: DateTimeNullableFilter<"Cliente"> | Date | string | null
+    nomeProjeto?: StringNullableFilter<"Cliente"> | string | null
   }
 
   export type ClienteOrderByWithRelationInput = {
@@ -3179,6 +3194,7 @@ export namespace Prisma {
     documento?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
     createdAt?: SortOrderInput | SortOrder
+    nomeProjeto?: SortOrderInput | SortOrder
   }
 
   export type ClienteWhereUniqueInput = Prisma.AtLeast<{
@@ -3193,6 +3209,7 @@ export namespace Prisma {
     documento?: StringNullableFilter<"Cliente"> | string | null
     status?: StringNullableFilter<"Cliente"> | string | null
     createdAt?: DateTimeNullableFilter<"Cliente"> | Date | string | null
+    nomeProjeto?: StringNullableFilter<"Cliente"> | string | null
   }, "id" | "email">
 
   export type ClienteOrderByWithAggregationInput = {
@@ -3204,6 +3221,7 @@ export namespace Prisma {
     documento?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
     createdAt?: SortOrderInput | SortOrder
+    nomeProjeto?: SortOrderInput | SortOrder
     _count?: ClienteCountOrderByAggregateInput
     _avg?: ClienteAvgOrderByAggregateInput
     _max?: ClienteMaxOrderByAggregateInput
@@ -3223,6 +3241,7 @@ export namespace Prisma {
     documento?: StringNullableWithAggregatesFilter<"Cliente"> | string | null
     status?: StringNullableWithAggregatesFilter<"Cliente"> | string | null
     createdAt?: DateTimeNullableWithAggregatesFilter<"Cliente"> | Date | string | null
+    nomeProjeto?: StringNullableWithAggregatesFilter<"Cliente"> | string | null
   }
 
   export type UsuarioWhereInput = {
@@ -3277,6 +3296,7 @@ export namespace Prisma {
     documento?: string | null
     status?: string | null
     createdAt?: Date | string | null
+    nomeProjeto?: string | null
   }
 
   export type ClienteUncheckedCreateInput = {
@@ -3288,6 +3308,7 @@ export namespace Prisma {
     documento?: string | null
     status?: string | null
     createdAt?: Date | string | null
+    nomeProjeto?: string | null
   }
 
   export type ClienteUpdateInput = {
@@ -3298,6 +3319,7 @@ export namespace Prisma {
     documento?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nomeProjeto?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ClienteUncheckedUpdateInput = {
@@ -3309,6 +3331,7 @@ export namespace Prisma {
     documento?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nomeProjeto?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ClienteCreateManyInput = {
@@ -3320,6 +3343,7 @@ export namespace Prisma {
     documento?: string | null
     status?: string | null
     createdAt?: Date | string | null
+    nomeProjeto?: string | null
   }
 
   export type ClienteUpdateManyMutationInput = {
@@ -3330,6 +3354,7 @@ export namespace Prisma {
     documento?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nomeProjeto?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ClienteUncheckedUpdateManyInput = {
@@ -3341,6 +3366,7 @@ export namespace Prisma {
     documento?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nomeProjeto?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UsuarioCreateInput = {
@@ -3448,6 +3474,7 @@ export namespace Prisma {
     documento?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    nomeProjeto?: SortOrder
   }
 
   export type ClienteAvgOrderByAggregateInput = {
@@ -3463,6 +3490,7 @@ export namespace Prisma {
     documento?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    nomeProjeto?: SortOrder
   }
 
   export type ClienteMinOrderByAggregateInput = {
@@ -3474,6 +3502,7 @@ export namespace Prisma {
     documento?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    nomeProjeto?: SortOrder
   }
 
   export type ClienteSumOrderByAggregateInput = {

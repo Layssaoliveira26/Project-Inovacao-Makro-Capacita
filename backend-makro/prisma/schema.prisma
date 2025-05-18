@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -17,7 +16,7 @@ model Cliente {
   documento  String?
   status     String? @default("Em análise")
   createdAt  DateTime? @default(now())
-  //nomeProjeto String?
+  nomeProjeto String
 }
 
 model Usuario {
