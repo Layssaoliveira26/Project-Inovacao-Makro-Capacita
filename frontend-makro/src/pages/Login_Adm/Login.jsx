@@ -22,34 +22,36 @@ function Login() {
     };
 
     return (
-        <div className='tela_login'>
+        <div className='container_geral'>
             <div className='logo_makro'>
-                <img src={Logo} alt='Makro Logo' />
+                    <img src={Logo} alt='Makro Logo' />
             </div>
-            <div className='bloco_login'>
-                <h2>Login</h2>
-                <div className='input_group'>
-                    <input
-                        type='email'
-                        placeholder='E-mail'
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                    />
+            <div className='tela_login'>
+                <div className='bloco_login'>
+                    <h2>Login</h2>
+                    <div className='input_group'>
+                        <input
+                            type='email'
+                            placeholder='E-mail'
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                        />
+                    </div>
+                    <div className='input_group'>
+                        <input
+                            type='password'
+                            placeholder='Senha'
+                            value={senha}
+                            onChange={e => setSenha(e.target.value)}
+                        />
+                    </div>
+                    {erro && <p style={{ color: 'red' }}>{erro}</p>}
+                    <button className='enter_btn' onClick={handleLogin}>
+                        Entrar
+                    </button>
                 </div>
-                <div className='input_group'>
-                    <input
-                        type='password'
-                        placeholder='Senha'
-                        value={senha}
-                        onChange={e => setSenha(e.target.value)}
-                    />
-                </div>
-                {erro && <p style={{ color: 'red' }}>{erro}</p>}
-                <button className='enter_btn' onClick={handleLogin}>
-                    Entrar
-                </button>
             </div>
-        </div>
+        </div>        
     );
 }
 
