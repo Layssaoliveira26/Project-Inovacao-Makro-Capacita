@@ -1,7 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const usuarioRoutes = require('./routes/usuarioRoutes');
-const clienteRoutes = require('./routes/clienteRoutes');
+const submissaoRoutes = require('./routes/submissaoRoutes');
+const desafioRoutes = require('./routes/desafioRoutes');
+const formularioRoutes = require('./routes/formularioRoutes');
+const contatoRoutes = require('./routes/contatoRoutes');
 
 const app = express();
 const PORT = 3000;
@@ -11,7 +14,10 @@ app.use(express.json());
 
 // Rota com prefixo /api
 app.use('/api', usuarioRoutes);
-app.use('/api', clienteRoutes);
+app.use('/api', submissaoRoutes);
+app.use('/api', desafioRoutes);
+app.use('/api', formularioRoutes);
+app.use('/api', contatoRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
