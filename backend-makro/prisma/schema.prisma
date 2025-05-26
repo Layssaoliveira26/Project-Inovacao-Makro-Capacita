@@ -10,29 +10,20 @@ datasource db {
 model Submissao {
   id         Int    @id @default(autoincrement())
   nome       String
-  desafioOrigem       String
-  email      String @unique
+  email      String 
   telefone   String
   descricao  String
   documento  String?
   status     String? @default("Em análise")
   createdAt  DateTime? @default(now())
-}
-
-model Formulario {
-  id         Int    @id @default(autoincrement())
-  nome       String
-  email      String @unique
-  celular   String
-  descricao  String
-  status     String? @default("Em análise")
-  createdAt  DateTime? @default(now())
+  desafioId Int
+  desafioOrigem Desafio @relation(fields: [desafioId], references: [id])
 }
 
 model Contatos {
   id         Int    @id @default(autoincrement())
   nome       String
-  email      String @unique
+  email      String
   telefone   String
   descricao  String
   status     String? @default("Em análise")
@@ -48,6 +39,18 @@ model Usuario {
 model Desafio {
   id    Int    @id @default(autoincrement())
   titulo String
-  imagem String?
+  imagem String
   descricao String 
+  resumo String
+  status Boolean
+  submissao Submissao[]
+}
+
+model Cases {
+  id    Int    @id @default(autoincrement())
+  titulo String
+  imagem String
+  descricao String
+  resumo String
+  status Boolean
 }
