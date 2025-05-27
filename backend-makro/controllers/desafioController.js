@@ -13,11 +13,11 @@ exports.getAllDesafios = async (req, res) => {
 
 // Criar novo desafio
 exports.createDesafio = async (req, res) => {
-  const { titulo, imagem, descricao } = req.body;
+  const { titulo, imagem, descricao, resumo, status } = req.body;
 
   try {
     const novoDesafio = await prisma.desafio.create({
-      data: { titulo, imagem, descricao }
+      data: { titulo, imagem, descricao, resumo, status }
     });
 
     res.status(201).json(novoDesafio);
@@ -48,12 +48,12 @@ exports.getDesafioById = async (req, res) => {
 // Atualizar desafio
 exports.updateDesafio = async (req, res) => {
   const { id } = req.params;
-  const { titulo, imagem, descricao } = req.body;
+  const { titulo, imagem, descricao, resumo, status } = req.body;
 
   try {
     const desafioAtualizado = await prisma.desafio.update({
       where: { id: parseInt(id) },
-      data: { titulo, imagem, descricao }
+      data: { titulo, imagem, descricao, resumo, status }
     });
 
     res.json(desafioAtualizado);

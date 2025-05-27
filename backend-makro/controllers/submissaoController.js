@@ -1,16 +1,14 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-
-//Formatar data
-function formatDate(date){
-  return new Date(date).toLocaleDateString('pt-BR')
+// Formatador de datas (mantido como estava)
+function formatDate(date) {
+  return new Date(date).toLocaleDateString('pt-BR');
 }
 
-// Listar todos as submissões
+// Listar todas as submissões
 exports.getAllProjects = async (req, res) => {
   try {
-    // Query com campos obrigatórios apenas
     const submissoes = await prisma.submissao.findMany({
       orderBy: { id: 'desc' },
       select: {
@@ -27,28 +25,21 @@ exports.getAllProjects = async (req, res) => {
     // Adiciona status padrão se necessário no frontend
     const response = submissoes.map(submissao => ({
       ...submissao,
-      status: "Em análise" // Valor padrão
+      status: "Em análise"
     }));
 
     res.json(response);
-
   } catch (error) {
     console.error('Erro:', error);
-    res.status(500).json({ 
-      error: 'Erro ao buscar submissoes',
-      details: error.message
-    });
+    res.status(500).json({ error: 'Erro ao buscar submissões' });
   }
 };
 
-
-// Criar novo submissao (projeto)
+// Criar nova submissão (projeto)
 exports.createProject = async (req, res) => {
-  // Log para debug (opcional)
   console.log('[DEBUG] Dados recebidos:', req.body);
 
-  // Validação dos campos obrigatórios
-  const requiredFields = ['nome', 'desafioOrigem', 'email', 'telefone', 'descricao', ];
+  const requiredFields = ['nome', 'desafioId', 'email', 'telefone', 'descricao'];
   const missingFields = requiredFields.filter(field => !req.body[field]);
 
   if (missingFields.length > 0) {
@@ -59,69 +50,28 @@ exports.createProject = async (req, res) => {
     });
   }
 
-  // Preparação dos dados
   const projectData = {
     nome: String(req.body.nome),
-    desafioOrigem: String(req.body.desafioOrigem),
     email: String(req.body.email),
     telefone: String(req.body.telefone),
     descricao: String(req.body.descricao),
     documento: req.body.documento ? String(req.body.documento) : null,
-    // status e createdAt são preenchidos automaticamente pelo Prisma
+    desafioOrigem: { connect: { id: parseInt(req.body.desafioId) } } // Correção na referência ao Desafio
   };
 
   try {
-    // Validação de e-mail único
-    const emailExists = await prisma.submissao.findUnique({
-      where: { email: projectData.email }
-    });
-
-    if (emailExists) {
-      return res.status(409).json({
-        error: 'E-mail já cadastrado',
-        solution: 'Utilize outro e-mail ou recupere o cadastro existente'
-      });
-    }
-
-    // Criação no banco de dados
     const newProject = await prisma.submissao.create({
       data: projectData
     });
 
-    // Resposta formatada para o frontend
-    const formattedResponse = {
-      id: newProject.id,
-      name: newProject.nome,
-      challengeOrigin: newProject.desafioOrigem,
-      email: newProject.email,
-      phone: newProject.telefone,
-      description: newProject.descricao,
-      receiptDate: formatDate(newProject.createdAt),
-      status: newProject.status || 'Em análise'
-    };
-
-    return res.status(201).json(formattedResponse);
-
+    res.status(201).json(newProject);
   } catch (error) {
     console.error('[ERROR] Erro ao criar projeto:', error);
-
-    // Tratamento específico para erros do Prisma
-    if (error.code === 'P2002') {
-      return res.status(400).json({
-        error: 'Erro de duplicidade',
-        details: 'O e-mail já está em uso por outro submissao'
-      });
-    }
-
-    return res.status(500).json({
-      error: 'Erro interno ao criar projeto',
-      details: error.message,
-      prismaErrorCode: error.code || 'N/A'
-    });
+    res.status(500).json({ error: 'Erro interno ao criar projeto' });
   }
 };
 
-// Buscar submissao por ID
+// Buscar submissão por ID
 exports.getSubmissaoById = async (req, res) => {
   const { id } = req.params;
 
@@ -131,33 +81,40 @@ exports.getSubmissaoById = async (req, res) => {
     });
 
     if (!submissao) {
-      return res.status(404).json({ error: 'Submissao não encontrado.' });
+      return res.status(404).json({ error: 'Submissão não encontrada.' });
     }
 
     res.json(submissao);
   } catch (error) {
-    res.status(500).json({ error: 'Erro ao buscar submissao.' });
+    res.status(500).json({ error: 'Erro ao buscar submissão.' });
   }
 };
 
-// Atualizar submissao
+// Atualizar submissão
 exports.updateSubmissao = async (req, res) => {
   const { id } = req.params;
-  const { nome, desafioOrigem, email, telefone, descricao, documento } = req.body;
+  const { nome, desafioId, email, telefone, descricao, documento } = req.body;
 
   try {
     const submissaoAtualizado = await prisma.submissao.update({
       where: { id: parseInt(id) },
-      data: { nome, desafioOrigem, email, telefone, descricao, documento }
+      data: {
+        nome,
+        email,
+        telefone,
+        descricao,
+        documento,
+        desafioOrigem: { connect: { id: parseInt(desafioId) } } // Correção na referência ao Desafio
+      }
     });
 
     res.json(submissaoAtualizado);
   } catch (error) {
-    res.status(400).json({ error: 'Erro ao atualizar submissao.' });
+    res.status(400).json({ error: 'Erro ao atualizar submissão.' });
   }
 };
 
-// Deletar submissao
+// Deletar submissão
 exports.deleteSubmissao = async (req, res) => {
   const { id } = req.params;
 
@@ -166,8 +123,8 @@ exports.deleteSubmissao = async (req, res) => {
       where: { id: parseInt(id) }
     });
 
-    res.json({ message: 'Submissao deletado com sucesso.' });
+    res.json({ message: 'Submissão deletada com sucesso.' });
   } catch (error) {
-    res.status(400).json({ error: 'Erro ao deletar submissao.' });
+    res.status(400).json({ error: 'Erro ao deletar submissão.' });
   }
 };

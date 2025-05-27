@@ -59,17 +59,6 @@ exports.createContato = async (req, res) => {
   };
 
   try {
-    const emailExists = await prisma.contatos.findUnique({
-      where: { email: contatoData.email }
-    });
-
-    if (emailExists) {
-      return res.status(409).json({
-        error: 'E-mail já cadastrado',
-        solution: 'Utilize outro e-mail ou recupere o cadastro existente'
-      });
-    }
-
     const newContato = await prisma.contatos.create({
       data: contatoData
     });
