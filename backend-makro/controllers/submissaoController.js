@@ -18,7 +18,8 @@ exports.getAllProjects = async (req, res) => {
         email: true,
         telefone: true,
         descricao: true,
-        documento: true
+        documento: true,
+        nomeProjeto: true
       }
     });
 
@@ -39,7 +40,7 @@ exports.getAllProjects = async (req, res) => {
 exports.createProject = async (req, res) => {
   console.log('[DEBUG] Dados recebidos:', req.body);
 
-  const requiredFields = ['nome', 'desafioId', 'email', 'telefone', 'descricao'];
+  const requiredFields = ['nome', 'desafioId', 'email', 'telefone', 'descricao', 'nomeProjeto'];
   const missingFields = requiredFields.filter(field => !req.body[field]);
 
   if (missingFields.length > 0) {
@@ -56,6 +57,7 @@ exports.createProject = async (req, res) => {
     telefone: String(req.body.telefone),
     descricao: String(req.body.descricao),
     documento: req.body.documento ? String(req.body.documento) : null,
+    nomeProjeto: String(req.body.nomeProjeto),
     desafioOrigem: { connect: { id: parseInt(req.body.desafioId) } } // Correção na referência ao Desafio
   };
 
@@ -93,7 +95,7 @@ exports.getSubmissaoById = async (req, res) => {
 // Atualizar submissão
 exports.updateSubmissao = async (req, res) => {
   const { id } = req.params;
-  const { nome, desafioId, email, telefone, descricao, documento } = req.body;
+  const { nome, desafioId, email, telefone, descricao, documento, nomeProjeto } = req.body;
 
   try {
     const submissaoAtualizado = await prisma.submissao.update({
@@ -104,6 +106,7 @@ exports.updateSubmissao = async (req, res) => {
         telefone,
         descricao,
         documento,
+        nomeProjeto,
         desafioOrigem: { connect: { id: parseInt(desafioId) } } // Correção na referência ao Desafio
       }
     });

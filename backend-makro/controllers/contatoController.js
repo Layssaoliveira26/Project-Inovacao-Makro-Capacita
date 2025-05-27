@@ -54,7 +54,7 @@ exports.createContato = async (req, res) => {
   const contatoData = {
     nome: String(req.body.nome),
     email: String(req.body.email),
-    celular: String(req.body.celular),
+    telefone: String(req.body.telefone),
     descricao: String(req.body.descricao)
   };
 

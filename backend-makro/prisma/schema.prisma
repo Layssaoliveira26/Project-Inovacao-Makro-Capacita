@@ -14,6 +14,7 @@ model Submissao {
   telefone   String
   descricao  String
   documento  String?
+  nomeProjeto String
   status     String? @default("Em análise")
   createdAt  DateTime? @default(now())
   desafioId Int
