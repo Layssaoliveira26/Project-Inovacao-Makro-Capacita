@@ -5,6 +5,7 @@ const submissaoRoutes = require('./routes/submissaoRoutes');
 const desafioRoutes = require('./routes/desafioRoutes');
 const formularioRoutes = require('./routes/formularioRoutes');
 const contatoRoutes = require('./routes/contatoRoutes');
+const caseRoutes = require('./routes/caseRoutes');
 
 const app = express();
 const PORT = 3000;
@@ -18,6 +19,7 @@ app.use('/api', submissaoRoutes);
 app.use('/api', desafioRoutes);
 app.use('/api', formularioRoutes);
 app.use('/api', contatoRoutes);
+app.use('/api', caseRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
