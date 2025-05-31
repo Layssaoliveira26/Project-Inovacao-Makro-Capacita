@@ -45,6 +45,38 @@ exports.getDesafioById = async (req, res) => {
   }
 };
 
+//Alterar status
+exports.alterarStatusCase = async (req, res) => {
+    const { id } = req.params;
+    const {status} = req.body;
+  
+    try {
+      const alteraStatus = await prisma.desafio.update({
+        where: { id: parseInt(id) },
+        data: {status}
+      });
+  
+      res.status(201).json(alteraStatus);
+    } catch (error) {
+      res.status(400).json({ error: 'Erro ao alterar o case.' });
+    }
+  };
+
+// Listar desafios ativos
+exports.getActiveDesafios = async (req, res) => {
+ 
+  try {
+    const DesafiosAtivos = await prisma.desafio.findMany({
+      where: { status : true }
+    });
+
+    res.json(DesafiosAtivos);
+
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao buscar desafios ativos.' });
+  }
+};
+
 // Atualizar desafio
 exports.updateDesafio = async (req, res) => {
   const { id } = req.params;

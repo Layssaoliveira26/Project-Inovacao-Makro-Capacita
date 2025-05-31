@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 // Listar todos os cases
 exports.getAllCases = async (req, res) => {
   try {
-    const cases = await prisma.desafio.findMany();
+    const cases = await prisma.cases.findMany();
     res.json(cases);
   } catch (error) {
     res.status(500).json({ error: 'Erro ao buscar case.' });
@@ -16,7 +16,7 @@ exports.createCase = async (req, res) => {
     const { titulo, imagem, descricao, resumo, status } = req.body;
   
     try {
-      const novoCase = await prisma.case.create({
+      const novoCase = await prisma.cases.create({
         data: { titulo, imagem, descricao, resumo, status }
       });
   
@@ -32,7 +32,7 @@ exports.excluirCase = async (req, res) => {
     const { id } = req.params;
   
     try {
-      await prisma.case.delete({
+      await prisma.cases.delete({
         where: { id: parseInt(id) }
       });
   
@@ -43,13 +43,12 @@ exports.excluirCase = async (req, res) => {
   };
 
 //Alterar status
-
 exports.alterarStatusCase = async (req, res) => {
     const { id } = req.params;
     const {status} = req.body;
   
     try {
-      const alteraStatus = await prisma.case.update({
+      const alteraStatus = await prisma.cases.update({
         where: { id: parseInt(id) },
         data: {status}
       });
@@ -72,6 +71,25 @@ exports.getActiveCases = async (req, res) => {
 
   } catch (error) {
     res.status(500).json({ error: 'Erro ao buscar cases ativos.' });
+  }
+};
+
+// Buscar case por ID
+exports.getCaseById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const cases = await prisma.cases.findUnique({
+      where: { id: parseInt(id) }
+    });
+
+    if (!cases) {
+      return res.status(404).json({ error: 'Desafio não encontrado.' });
+    }
+
+    res.json(cases);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao buscar desafio.' });
   }
 };
 
