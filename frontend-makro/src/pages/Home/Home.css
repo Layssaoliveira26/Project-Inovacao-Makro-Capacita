@@ -1,0 +1,119 @@
+html, body, #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    /*background-color: #10142F;*/
+}
+
+.header {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+}
+
+.tela_home {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.logo_makro_header {
+    position: absolute;
+    top: 50px;
+    left: 20px;
+    height: 40px;
+    z-index: 10;
+}
+
+.logo_makro_header img{
+    width: 150px;
+}
+
+.conteudo_home {
+    margin-bottom: 0;
+    margin-top: 1vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 83%;
+    width: 90%;
+    max-width: 1300px;
+    gap: 40px;
+    padding-top: 60px; /* Garante que o logo não fique encoberto */
+}
+
+.img_representante {
+    height: 80vh;
+    width: auto;
+    max-width: 45%;
+    object-fit: contain;
+    margin-bottom: 0;
+}
+
+.img_representante img{
+    height: 80vh;
+    width: auto;
+    max-width: 40%;
+    object-fit: contain;
+}
+
+.textos_header {
+    color: white;
+    text-align: left;
+    max-width: 500px;
+    flex: 1;
+}
+
+.textos_header h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    line-height: 1.2;
+}
+
+.botoes_header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.btn_header, .btn_header_white {
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.btn_header {
+    background-color: #ED1C24;
+    color: white;
+}
+
+.btn_header:hover {
+    opacity: 0.9;
+}
+
+.btn_header_white {
+    background-color: white;
+    color: #10142F;
+}
+
+.btn_header_white:hover {
+    opacity: 0.9;
+}
+
+.dados_transicao {
+    top: 0;
+    margin-top: 0;
+    width: 130%;
+}

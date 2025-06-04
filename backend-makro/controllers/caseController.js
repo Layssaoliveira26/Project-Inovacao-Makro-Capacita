@@ -1,5 +1,18 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const multer = require('multer');
+
+// Configuração do armazenamento de imagens
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/'); // Pasta onde as imagens serão armazenadas
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`); // Nome único baseado no timestamp
+    }
+});
+
+const upload = multer({ storage });
 
 // Listar todos os cases
 exports.getAllCases = async (req, res) => {
@@ -11,20 +24,25 @@ exports.getAllCases = async (req, res) => {
   }
 };
 
-// Criar Case
+// Criar novo case com upload de imagem
 exports.createCase = async (req, res) => {
-    const { titulo, imagem, descricao, resumo, status } = req.body;
-  
+    console.log("Dados recebidos no backend:", req.body);
+    console.log("Arquivo recebido:", req.file);
+
+    const { titulo, descricao, resumo, status } = req.body;
+    const imagem = req.file ? req.file.filename : null;
+
     try {
-      const novoCase = await prisma.cases.create({
-        data: { titulo, imagem, descricao, resumo, status }
-      });
-  
-      res.status(201).json(novoCase);
+        const novoCase = await prisma.cases.create({
+            data: { titulo, imagem, descricao, resumo, status: JSON.parse(status) } // Convertendo para booleano
+        });
+
+        res.status(201).json(novoCase);
     } catch (error) {
-      res.status(400).json({ error: 'Erro ao criar case.' });
+        console.error("Erro ao criar case:", error);
+        res.status(400).json({ error: 'Erro ao criar case.' });
     }
-  };
+};
 
 
 // Excluir Case 
@@ -96,16 +114,18 @@ exports.getCaseById = async (req, res) => {
 // Editar case
 exports.updateCase = async (req, res) => {
   const { id } = req.params;
-  const { titulo, imagem, descricao, resumo, status } = req.body;
-
+  const { titulo, descricao, resumo, status } = req.body;
+  const imagem = req.file ? req.file.filename : null;
   try {
-    const caseAtualizado = await prisma.cases.update({
-      where: { id: parseInt(id) },
-      data: { titulo, imagem, descricao, resumo, status }
-    });
-
-    res.json(caseAtualizado);
-  } catch (error) {
-    res.status(400).json({ error: 'Erro ao atualizar case.' });
-  }
+      const caseAtualizado = await prisma.cases.update({
+          where: { id: parseInt(id) },
+          data: { titulo, imagem, descricao, resumo, status }
+      });
+      res.json(caseAtualizado);
+    } catch (error) {
+      res.status(400).json({ error: 'Erro ao atualizar case.' });
+    }
 };
+
+// Exportando o upload de imagem para uso nas rotas
+exports.upload = upload;

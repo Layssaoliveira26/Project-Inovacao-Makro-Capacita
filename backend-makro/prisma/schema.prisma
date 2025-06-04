@@ -13,8 +13,8 @@ model Submissao {
   email      String 
   telefone   String
   descricao  String
-  documento  String?
   nomeProjeto String
+  documento  String?
   status     String? @default("Em análise")
   createdAt  DateTime? @default(now())
   desafioId Int

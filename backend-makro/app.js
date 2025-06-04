@@ -20,6 +20,8 @@ app.use('/api', desafioRoutes);
 app.use('/api', formularioRoutes);
 app.use('/api', contatoRoutes);
 app.use('/api', caseRoutes);
+// Servindo a pasta de uploads
+app.use('/uploads', express.static('uploads'));
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);

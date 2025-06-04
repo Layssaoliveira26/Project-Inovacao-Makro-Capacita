@@ -1,0 +1,305 @@
+import './Desafios.css';
+import Logo from '../../assets/logo_makro.png';
+import '../Login_Adm/Login.css';
+import Imagem from '../../assets/imagem 1.png';
+import DeleteIcon from '../../assets/delete.png';
+import AlterarIcon from '../../assets/alterar.png';
+import React, { useState, useEffect } from 'react';
+import api from '../../services/api';
+
+function Desafios() {
+    const [challenges, setChallenges] = useState([]);
+    const [selectedChallenge, setSelectedChallenge] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [hoveredButton, setHoveredButton] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+
+    // Estados para os campos de cadastro
+    const [tituloDesafio, setTituloDesafio] = useState('');
+    const [descricaoDesafio, setDescricaoDesafio] = useState('');
+    const [imagemDesafio, setImagemDesafio] = useState(null);
+    const [resumoDesafio, setResumoDesafio] = useState('');
+
+    // Buscar desafios do backend
+    async function fetchChallenges() {
+        try {
+            setIsLoading(true);
+            const response = await api.get('/desafios');
+            setChallenges(response.data);
+        } catch (err) {
+            setError("Erro ao carregar desafios");
+            console.error("Detalhes do erro:", err.response?.data || err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        fetchChallenges();
+    }, []);
+
+    const openChallengeDetails = (challenge) => {
+        setSelectedChallenge(challenge);
+    };
+
+    const closeChallengeDetails = () => {
+        setSelectedChallenge(null);
+    };
+
+    const handleEdit = (id) => {
+        console.log(`Editar desafio com id: ${id}`);
+    };
+
+    const handleToggleStatus = async (id, currentStatus) => {
+        try {
+            const updatedStatus = !currentStatus; // Alterna entre true e false
+            await api.put(`/desafios/status/${id}`, { status: updatedStatus });
+
+            // Atualiza a lista de desafios no estado
+            setChallenges(challenges.map(challenge =>
+                challenge.id === id ? { ...challenge, status: updatedStatus } : challenge
+            ));
+
+            console.log(`Status do desafio com ID ${id} alterado para ${updatedStatus ? 'Ativo' : 'Inativo'}`);
+        } catch (error) {
+            console.error("Erro ao alterar status:", error.response?.data || error.message);
+        }
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            await api.delete(`/desafios/${id}`);
+            setChallenges(challenges.filter(challenge => challenge.id !== id));
+            console.log(`Desafio com ID ${id} excluído com sucesso!`);
+        } catch (error) {
+            console.error("Erro ao excluir desafio:", error.response?.data || error.message);
+        }
+    };
+
+    // Função para cadastrar desafio no banco de dados
+    const handleCadastroDesafio = async () => {
+    try {
+        const formData = new FormData();
+        formData.append('titulo', tituloDesafio);
+        formData.append('descricao', descricaoDesafio);
+        formData.append('resumo', resumoDesafio);
+        formData.append('status', false);
+
+        if (imagemDesafio) {
+            formData.append('imagem', imagemDesafio);
+        }
+
+        // Teste se os dados estão de fato no FormData
+        for (let pair of formData.entries()) {
+            console.log(`${pair[0]}:`, pair[1]);
+        }
+
+        const response = await api.post('/desafios', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
+        console.log("Desafio cadastrado com sucesso:", response.data);
+
+        setChallenges([...challenges, response.data]);
+        setShowModal(false);
+        setTituloDesafio('');
+        setDescricaoDesafio('');
+        setImagemDesafio(null);
+        setResumoDesafio('');
+    } catch (error) {
+        console.error("Erro ao cadastrar desafio:", error.response?.data || error.message);
+    }
+};
+
+    // Processar imagem do desafio
+    const handleImageChangeDesafio = (event) => {
+        const file = event.target.files[0];
+
+        if (file) {
+            setImagemDesafio(file);
+        }
+    };
+
+    if (isLoading) return <div className="loading">Carregando desafios...</div>;
+    if (error) return <div className="error">{error}</div>;
+
+    return (
+        <div className='container-desafios'>
+            <header className="navbar-cadastro">
+                <div className="navbar-left">
+                    <div className="logo-container">
+                        <img src={Logo || "/placeholder.svg"} alt="Makro Logo" className="logo-image" />
+                    </div>
+                    <div className="nav-links-container">
+                        <a href="/solucoes_adm" className="nav-link">Submissões</a>
+                        <a href="/contatos_adm" className="nav-link">Contatos</a>
+                        <a href="/desafios_adm" className="nav-link active">Desafios</a>
+                        <a href="/cases_adm" className="nav-link">Cases de Sucesso</a>
+                        <a href="/cadastro_adm" className="nav-link">Cadastro usuários</a>
+                    </div>
+                </div>
+                <div className="navbar-right">
+                    <div className="user-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="20" cy="20" r="19" stroke="white" strokeWidth="2" />
+                            <circle cx="20" cy="15" r="6" stroke="white" strokeWidth="2" />
+                            <path d="M7 32C7 25.9249 12.9249 21 20 21C27.0751 21 33 25.9249 33 32" stroke="white" strokeWidth="2" />
+                        </svg>
+                    </div>
+                </div>
+            </header>
+
+            <div className="header-desafios">
+                <h2>Desafios</h2>
+                <button className="open-modal-btn" onClick={() => setShowModal(true)}>Criar Desafio</button>
+            </div>
+
+            {/* Modal de criação de desafios */}
+            {showModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <button className="close-btn" onClick={() => setShowModal(false)}>X</button>
+                            <h2>Cadastrar desafio</h2>
+                        </div>
+                        <div className="cadastro_desafio">
+                            <div className="bloco_desafio">
+                                <div className='conteudo_desafio'>
+                                    <h3>Título do Desafio:</h3>
+                                    <div className='input_desafio'>
+                                        <input type='text' placeholder='Digite o título do desafio'
+                                            value={tituloDesafio} onChange={(e) => setTituloDesafio(e.target.value)} />
+                                    </div>
+
+                                    <h3>Descrição do Desafio:</h3>
+                                    <div className='input_desafio'>
+                                        <textarea placeholder='Descreva brevemente o desafio...'
+                                            value={descricaoDesafio} onChange={(e) => setDescricaoDesafio(e.target.value)} />
+                                    </div>
+
+                                    <h3>Resumo do Desafio:</h3>
+                                    <div className='input_desafio'>
+                                        <textarea 
+                                            placeholder="Resuma brevemente o desafio..." 
+                                            value={resumoDesafio || ''} // Garante que não será null
+                                            onChange={(e) => setResumoDesafio(e.target.value)} 
+                                        />
+                                    </div>
+
+                                    <h3>Imagem do Desafio:</h3>
+                                    <div className='input_desafio file-upload'>
+                                        <label htmlFor="imageUploadDesafio" className="drop-area">
+                                            {imagemDesafio ? (
+                                                <img src={URL.createObjectURL(imagemDesafio)} alt="Preview da imagem" width="80" />
+                                            ) : (
+                                                <div>
+                                                    <p>Arraste e solte uma imagem</p>
+                                                    <span className="file-select">Procurar</span>
+                                                </div>
+                                            )}
+                                        </label>
+                                        <input type="file" id="imageUploadDesafio" hidden accept="image/*"
+                                            onChange={handleImageChangeDesafio} />
+                                    </div>
+
+                                    <button className='cad_button' onClick={handleCadastroDesafio}>Cadastrar Desafio</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {selectedChallenge && (
+    <div className="modal">
+        <div className="modal-content">
+            <h3>Detalhes do Desafio</h3>
+            <button className="close-button" onClick={closeChallengeDetails}>
+                &times;
+            </button>
+            <div className="challenge-details">
+                <div className="detail-row">
+                    <span className="detail-label">Título:</span>
+                    <span className="detail-value">{selectedChallenge.titulo}</span>
+                </div>
+                <div className="detail-row">
+                    <span className="detail-label">Descrição:</span>
+                    <span className="detail-value">{selectedChallenge.descricao}</span>
+                </div>
+                <div className="detail-row">
+                    <span className="detail-label">Resumo:</span>
+                    <span className="detail-value">{selectedChallenge.resumo}</span>
+                </div>
+                <div className="detail-row">
+                    <span className="detail-label">Status:</span>
+                    <span className={`status-badge ${selectedChallenge.status ? 'ativo' : 'inativo'}`}>
+                        {selectedChallenge.status ? 'Ativo' : 'Inativo'}
+                    </span>
+                </div>
+                <div className="detail-row">
+                    <span className="detail-label">Imagem:</span>
+                    {selectedChallenge.imagem ? (
+                        <img src={`http://localhost:3000/uploads/${selectedChallenge.imagem}`} alt="Imagem do desafio" width="120" />
+                    ) : (
+                        <span>Sem imagem</span>
+                    )}
+                </div>
+            </div>
+        </div>
+    </div>
+)}
+
+            {/* Tabela de desafios */}
+            <div className="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ação</th>
+                            <th>Título do desafio</th>
+                            <th>Descrição</th>
+                            <th>Imagem</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {challenges.map((challenge) => (
+                            <tr key={challenge.id} className="solution-row-2">
+                                <td className="detalhes">
+                                    <button className="expand-button" onClick={() => openChallengeDetails(challenge)}>+</button>
+                                </td>
+                                <td className="name-challenge-cell">{challenge.titulo}</td>
+                                <td className="description-cell">{challenge.descricao}</td>
+                                {/* <td className="resumo-cell">{challenge.resumo}</td> */}
+                                {/* <td className="image-cell">
+                                    {challenge.imagem ? (
+                                        <img src={challenge.imagem} alt="Imagem do desafio" width="80" />
+                                    ) : (
+                                        <span>Sem imagem</span>
+                                    )}
+                                </td> */}
+                                <td>
+                                    <span className={`status-badge ${challenge.status ? 'ativo' : 'inativo'}`}>
+                                        {challenge.status ? "Ativo" : "Inativo"}
+                                    </span>
+                                </td>
+                                <td className="status-cell">
+                                    <button onClick={() => handleToggleStatus(challenge.id, challenge.status)} className="status-button">
+                                        <img src={AlterarIcon} alt="Alterar Status" width="20" />
+                                    </button>
+                                </td>
+                                <td className="actions-cell">
+                                    <button onClick={() => handleDelete(challenge.id)} className="delete-button">
+                                        <img src={DeleteIcon} alt="Deletar" width="20" />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+}
+
+export default Desafios;

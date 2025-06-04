@@ -16,7 +16,8 @@ exports.getAllContatos = async (req, res) => {
         nome: true,
         email: true,
         telefone: true,
-        descricao: true
+        descricao: true,
+        status: true
       }
     });
 
@@ -115,19 +116,49 @@ exports.getContatoById = async (req, res) => {
 // Atualizar contato
 exports.updateContato = async (req, res) => {
   const { id } = req.params;
-  const { nome, email, telefone, descricao } = req.body;
+  const { nome, email, telefone, descricao, status } = req.body;
+
+  // Validação do status
+  const statusValidos = ["Em análise", "Aguardando análise", "Aprovado", "Reprovado"];
+  if (status && !statusValidos.includes(status)) {
+    return res.status(400).json({ 
+      error: 'Status inválido',
+      details: `Status deve ser um dos: ${statusValidos.join(', ')}`
+    });
+  }
 
   try {
+    // Primeiro busca o contato atual
+    const contatoAtual = await prisma.contatos.findUnique({
+      where: { id: parseInt(id) }
+    });
+
+    if (!contatoAtual) {
+      return res.status(404).json({ error: 'Contato não encontrado.' });
+    }
+
+    // Atualiza com os dados recebidos ou mantém os existentes
     const contatoAtualizado = await prisma.contatos.update({
       where: { id: parseInt(id) },
-      data: { nome, email, telefone, descricao }
+      data: { 
+        nome: nome || contatoAtual.nome,
+        email: email || contatoAtual.email,
+        telefone: telefone || contatoAtual.telefone,
+        descricao: descricao || contatoAtual.descricao,
+        status: status || contatoAtual.status || "Em análise"
+      }
     });
 
     res.json(contatoAtualizado);
   } catch (error) {
-    res.status(400).json({ error: 'Erro ao atualizar contato.' });
+    console.error('Erro ao atualizar contato:', error);
+    res.status(400).json({ 
+      error: 'Erro ao atualizar contato.',
+      details: error.message 
+    });
   }
 };
+
 
 // Deletar contato
 exports.deleteContato = async (req, res) => {
