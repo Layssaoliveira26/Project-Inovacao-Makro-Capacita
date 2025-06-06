@@ -4,6 +4,7 @@ import '../Login_Adm/Login.css';
 import Imagem from '../../assets/imagem 1.png';
 import DeleteIcon from '../../assets/delete.png';
 import AlterarIcon from '../../assets/alterar.png';
+import EditarIcon from '../../assets/editar.png';
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 
@@ -84,7 +85,7 @@ function Desafios() {
         formData.append('titulo', tituloDesafio);
         formData.append('descricao', descricaoDesafio);
         formData.append('resumo', resumoDesafio);
-        formData.append('status', false);
+        formData.append('status', true);
 
         if (imagemDesafio) {
             formData.append('imagem', imagemDesafio);
@@ -161,7 +162,7 @@ function Desafios() {
                     <div className="modal-content">
                         <div className="modal-header">
                             <button className="close-btn" onClick={() => setShowModal(false)}>X</button>
-                            <h2>Cadastrar desafio</h2>
+                            <h4>Cadastrar desafio</h4>
                         </div>
                         <div className="cadastro_desafio">
                             <div className="bloco_desafio">
@@ -182,7 +183,7 @@ function Desafios() {
                                     <div className='input_desafio'>
                                         <textarea 
                                             placeholder="Resuma brevemente o desafio..." 
-                                            value={resumoDesafio || ''} // Garante que não será null
+                                            value={resumoDesafio || ''} Garante que não será null
                                             onChange={(e) => setResumoDesafio(e.target.value)} 
                                         />
                                     </div>
@@ -194,6 +195,7 @@ function Desafios() {
                                                 <img src={URL.createObjectURL(imagemDesafio)} alt="Preview da imagem" width="80" />
                                             ) : (
                                                 <div>
+                                                    <img src={Imagem} alt="Ícone da imagem" style={{ width: 40, marginBottom: 8 }} />
                                                     <p>Arraste e solte uma imagem</p>
                                                     <span className="file-select">Procurar</span>
                                                 </div>
@@ -240,7 +242,7 @@ function Desafios() {
                 <div className="detail-row">
                     <span className="detail-label">Imagem:</span>
                     {selectedChallenge.imagem ? (
-                        <img src={`http://localhost:3000/uploads/${selectedChallenge.imagem}`} alt="Imagem do desafio" width="120" />
+                        <img src={`http://localhost:3000/uploads/${selectedChallenge.imagem}`} alt="Imagem do desafio" width="250" />
                     ) : (
                         <span>Sem imagem</span>
                     )}
@@ -268,8 +270,8 @@ function Desafios() {
                                 <td className="detalhes">
                                     <button className="expand-button" onClick={() => openChallengeDetails(challenge)}>+</button>
                                 </td>
-                                <td className="name-challenge-cell">{challenge.titulo}</td>
-                                <td className="description-cell">{challenge.descricao}</td>
+                                <td className="name-challenge-cell" data-label="Nome:">{challenge.titulo}</td>
+                                <td className="description-cell" data-label="Descrição:">{challenge.descricao}</td>
                                 {/* <td className="resumo-cell">{challenge.resumo}</td> */}
                                 {/* <td className="image-cell">
                                     {challenge.imagem ? (
@@ -278,19 +280,24 @@ function Desafios() {
                                         <span>Sem imagem</span>
                                     )}
                                 </td> */}
-                                <td>
+                                <td className="status-exibition" data-label="Status:">
                                     <span className={`status-badge ${challenge.status ? 'ativo' : 'inativo'}`}>
                                         {challenge.status ? "Ativo" : "Inativo"}
                                     </span>
                                 </td>
-                                <td className="status-cell">
+                                <td className="challenge-status-cell">
                                     <button onClick={() => handleToggleStatus(challenge.id, challenge.status)} className="status-button">
                                         <img src={AlterarIcon} alt="Alterar Status" width="20" />
                                     </button>
                                 </td>
-                                <td className="actions-cell">
+                                <td className="challenge-actions-cell">
                                     <button onClick={() => handleDelete(challenge.id)} className="delete-button">
                                         <img src={DeleteIcon} alt="Deletar" width="20" />
+                                    </button>
+                                </td>
+                                <td className="challenge-actions-cell">
+                                    <button onClick={() => handleEdit(challenge.id)} className="delete-button">
+                                        <img src={EditarIcon} alt="Editar" width="20" />
                                     </button>
                                 </td>
                             </tr>

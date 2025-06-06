@@ -7,11 +7,10 @@
 }
 
 body {
-    background-color: #0a0c1b;
     color: white;
 }
 
-.solutions-container {
+.solutions-container, .container-cases {
     width: 100%;
     min-height: 100vh;
     padding: 1rem;
@@ -115,7 +114,7 @@ body {
     }
 }
 
-.solutions-container h2 {
+.solutions-container h2, .container-cases h2 {
     font-size: 2.5rem;
     font-weight: 600;
     margin-bottom: 2rem;
