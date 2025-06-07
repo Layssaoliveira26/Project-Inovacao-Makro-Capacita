@@ -8,6 +8,25 @@
         "Helvetica Neue", sans-serif;
 }
 
+.navbar-cadastro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #0a0c1b00;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: color 0.2s;
+    white-space: nowrap;
+    display: flex;
+    gap: 2rem;
+    margin-left: 1rem;
+    padding-top: 1.5rem;
+}
+
 /* html,
 body,
 #root {
