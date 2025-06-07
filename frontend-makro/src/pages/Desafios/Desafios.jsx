@@ -296,8 +296,8 @@ function Desafios() {
                                     </button>
                                 </td>
                                 <td className="challenge-actions-cell">
-                                    <button onClick={() => handleEdit(challenge.id)} className="delete-button">
-                                        <img src={EditarIcon} alt="Editar" width="20" />
+                                    <button onClick={() => handleEdit(challenge.id)} className="alter-button">
+                                        <img src={EditarIcon} alt="Editar" width="30" />
                                     </button>
                                 </td>
                             </tr>

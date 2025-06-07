@@ -140,11 +140,19 @@ thead {
 }
 
 tbody tr {
+
     background-color: #131736;
     border-radius: 8px;
     margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
+}
+
+.solution-row {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
 }
 
 td {
@@ -598,4 +606,8 @@ span {
     .status-options {
         flex-direction: column;
     }
+}
+
+.solution-row {
+    margin: 20px 0;
 }
