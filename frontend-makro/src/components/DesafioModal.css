@@ -1,0 +1,220 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+.modal-container {
+    position: relative;
+    max-width: 900px;
+    width: 100%;
+    max-height: 85vh;
+    overflow: visible;
+    border-radius: 12px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: black;
+    font-size: 24px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: background-color 0.2s;
+    margin-top: 20px;
+}
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+.modal-content2 {
+    display: flex;
+    min-height: 500px;
+    max-height: 85vh;
+    background-color: transparent;
+    border-radius: 8px;
+}
+.modal-left {
+    background: #10142F;
+    color: white;
+    padding: 40px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    border-radius: 8px;
+}
+.modal-title {
+    font-size: 2rem;
+    font-weight: bold;
+    line-height: 1.2;
+    margin: 0 0 30px 0;
+}
+.desafio-select {
+    width: 100%;
+    padding: 8px 12px;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    background-color: white;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+.modal-tag {
+    background: rgba(255, 255, 255, 0.9);
+    color: #1e3a8a;
+    padding: 8px 12px;
+    border-radius: 25px;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 30px;
+    font-size: 0.9rem;
+}
+.modal-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 0;
+    opacity: 0.95;
+}
+.modal-right {
+    background: #f3f4f6;
+    padding: 40px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    border-radius: 8px;
+}
+.section-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #374151;
+    margin: 0 5px 25px 0;
+    margin-top: 5px;
+}
+.participants-section {
+    margin-bottom: 40px;
+}
+.participants-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+.participant-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    color: #374151;
+}
+.participant-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.participant-icon img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+.benefits-section {
+    flex: 1;
+}
+.benefits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+.benefit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    color: #374151;
+    line-height: 1.5;
+}
+.benefit-check {
+    background: #dc2626;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+.submit-button {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    align-self: flex-start;
+}
+.submit-button:hover {
+    background: #b91c1c;
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+    .modal-content {
+        flex-direction: column;
+    }
+    .modal-left,
+    .modal-right {
+        padding: 30px 25px;
+    }
+    .modal-title {
+        font-size: 1.75rem;
+    }
+    .participants-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    .modal-container {
+        margin: 10px;
+        max-height: 95vh;
+        overflow-y: auto;
+    }
+}
+@media (max-width: 480px) {
+    .modal-left,
+    .modal-right {
+        padding: 25px 20px;
+    }
+    .modal-title {
+        font-size: 1.5rem;
+    }
+    .section-title {
+        font-size: 1.25rem;
+    }
+}

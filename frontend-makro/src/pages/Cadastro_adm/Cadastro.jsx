@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import Logo from '../../assets/logo_makro.png';
 import DeleteIcon from '../../assets/delete.png';
+import { Link } from 'react-router-dom';
 
 function Cases() {
     const [usuarios, setUsuarios] = useState([]);
@@ -67,7 +68,9 @@ function Cases() {
             <header className="navbar-cadastro">
                 <div className="navbar-left">
                     <div className="logo-container">
+                        <Link to='/login_adm'>
                         <img src={Logo || "/placeholder.svg"} alt="Makro Logo" className="logo-image" />
+                        </Link>
                     </div>
                     <div className="nav-links-container">
                         <a href="/solucoes_adm" className="nav-link">Submissões</a>
