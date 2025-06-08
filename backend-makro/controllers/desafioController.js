@@ -1,6 +1,8 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
 
 // Configuração do armazenamento de imagens
 const storage = multer.diskStorage({
@@ -97,12 +99,28 @@ exports.getActiveDesafios = async (req, res) => {
 exports.updateDesafio = async (req, res) => {
     const { id } = req.params;
     const { titulo, descricao, resumo, status } = req.body;
-    const imagem = req.file ? req.file.filename : null;
+    const imagem = req.file ? req.file.filename : req.body.imagem; // Usa a mesma imagem se nenhuma nova foi enviada
 
     try {
+        // Buscar desafio atual para obter a imagem antiga
+        const desafioAtual = await prisma.desafio.findUnique({ where: { id: parseInt(id) } });
+
+        if (!desafioAtual) {
+            return res.status(404).json({ error: 'Desafio não encontrado.' });
+        }
+
+        // Se houver uma nova imagem e uma imagem antiga, excluir a antiga
+        if (imagem && desafioAtual.imagem) {
+            const caminhoImagemAntiga = path.join(__dirname, '..', 'uploads', desafioAtual.imagem);
+            fs.unlink(caminhoImagemAntiga, (err) => {
+                if (err) console.error(`Erro ao excluir imagem antiga: ${err.message}`);
+            });
+        }
+
+        // Atualizar desafio no banco de dados
         const desafioAtualizado = await prisma.desafio.update({
             where: { id: parseInt(id) },
-            data: { titulo, imagem, descricao, resumo, status }
+            data: { titulo, imagem, descricao, resumo, status },
         });
 
         res.json(desafioAtualizado);
@@ -116,11 +134,25 @@ exports.deleteDesafio = async (req, res) => {
     const { id } = req.params;
 
     try {
-        await prisma.desafio.delete({
-            where: { id: parseInt(id) }
-        });
+        // Buscar o desafio antes de excluir
+        const desafio = await prisma.desafio.findUnique({ where: { id: parseInt(id) } });
 
-        res.json({ message: 'Desafio deletado com sucesso.' });
+        if (!desafio) {
+            return res.status(404).json({ error: 'Desafio não encontrado.' });
+        }
+
+        // Se houver imagem associada, excluí-la
+        if (desafio.imagem) {
+            const caminhoImagem = path.join(__dirname, '..', 'uploads', desafio.imagem);
+            fs.unlink(caminhoImagem, (err) => {
+                if (err) console.error(`Erro ao excluir imagem: ${err.message}`);
+            });
+        }
+
+        // Remover o desafio do banco de dados
+        await prisma.desafio.delete({ where: { id: parseInt(id) } });
+
+        res.json({ message: 'Desafio deletado com sucesso, imagem removida se existia.' });
     } catch (error) {
         res.status(400).json({ error: 'Erro ao deletar desafio.' });
     }

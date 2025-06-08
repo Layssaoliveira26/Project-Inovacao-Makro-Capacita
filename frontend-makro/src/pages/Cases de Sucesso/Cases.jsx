@@ -15,6 +15,8 @@ function Cases() {
     const [error, setError] = useState(null);
     const [hoveredButton, setHoveredButton] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [selectedChallengeForEdit, setSelectedChallengeForEdit] = useState(null);
 
     // Estados para os campos de cadastro
     const [tituloCase, setTituloCase] = useState('');
@@ -48,8 +50,9 @@ function Cases() {
         setSelectedChallenge(null);
     };
 
-    const handleEdit = (id) => {
-        console.log(`Editar case com id: ${id}`);
+    const handleEdit = (challenge) => {
+    setSelectedChallengeForEdit(challenge);
+    setShowEditModal(true);
     };
 
     const handleToggleStatus = async (id, currentStatus) => {
@@ -112,6 +115,41 @@ function Cases() {
         console.error("Erro ao cadastrar case:", error.response?.data || error.message);
     }
 };
+
+    const handleSaveEdit = async () => {
+        try {
+            const formData = new FormData();
+            formData.append('titulo', selectedChallengeForEdit.titulo);
+            formData.append('descricao', selectedChallengeForEdit.descricao);
+            formData.append('resumo', selectedChallengeForEdit.resumo);
+
+            // Se o usuário **não** escolheu uma nova imagem, envie a imagem já cadastrada
+            if (selectedChallengeForEdit.imagem instanceof File) {
+                formData.append('imagem', selectedChallengeForEdit.imagem);
+            } else if (selectedChallengeForEdit.imagem) {
+                formData.append('imagem', selectedChallengeForEdit.imagem); // Envia o nome da imagem existente
+            }
+
+            const response = await api.put(`/case/${selectedChallengeForEdit.id}`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
+            // Atualizar lista de desafios
+            setChallenges(challenges.map(challenge =>
+                challenge.id === selectedChallengeForEdit.id ? response.data : challenge
+            ));
+
+            // Atualizar modal de detalhes se for o mesmo desafio
+            if (selectedChallenge && selectedChallenge.id === selectedChallengeForEdit.id) {
+                setSelectedChallenge(response.data);
+            }
+
+            setShowEditModal(false);
+            console.log("Case atualizado com sucesso!");
+        } catch (error) {
+            console.error("Erro ao atualizar case:", error.response?.data || error.message);
+        }
+    };
 
     // Processar imagem do case
     const handleImageChangeCase = (event) => {
@@ -213,6 +251,63 @@ function Cases() {
                 </div>
             )}
 
+            {showEditModal && selectedChallengeForEdit && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <button className="close-btn" onClick={() => setShowEditModal(false)}>X</button>
+                            <h4>Editar case</h4>
+                        </div>
+                        <div className="cadastro_desafio">
+                            <div className="bloco_desafio">
+                                <div className='conteudo_desafio'>
+                                    <h3>Título do Case:</h3>
+                                    <div className='input_desafio'>
+                                        <textarea value={selectedChallengeForEdit.titulo} 
+                                            onChange={(e) => setSelectedChallengeForEdit({ ...selectedChallengeForEdit, titulo: e.target.value })} />
+                                    </div>
+
+                                    <h3>Descrição do Case:</h3>
+                                    <div className='input_desafio'>
+                                        <textarea value={selectedChallengeForEdit.descricao} 
+                                            onChange={(e) => setSelectedChallengeForEdit({ ...selectedChallengeForEdit, descricao: e.target.value })} />
+                                    </div>
+                                    <h3>Resumo do Case:</h3>
+                                    <div className='input_desafio'>
+                                        <textarea value={selectedChallengeForEdit.resumo} 
+                                            onChange={(e) => setSelectedChallengeForEdit({ ...selectedChallengeForEdit, resumo: e.target.value })} />
+                                    </div>
+
+                                    <h3>Imagem do Case:</h3>
+                                    <div className='input_desafio file-upload'>
+                                        <label htmlFor="imageUploadEdit" className="drop-area">
+                                            {selectedChallengeForEdit.imagem instanceof File ? (
+                                                <img src={URL.createObjectURL(selectedChallengeForEdit.imagem)} 
+                                                    alt="Preview nova imagem" width="80" />
+                                            ) : selectedChallengeForEdit.imagem ? (
+                                                <img src={`http://localhost:3000/uploads/${selectedChallengeForEdit.imagem}`} 
+                                                    alt="Preview imagem atual" width="80" />
+                                            ) : (
+                                                <span>Sem imagem cadastrada</span>
+                                            )}
+                                        </label>
+                                        <input type="file" id="imageUploadEdit" hidden accept="image/*"
+                                            onChange={(event) => {
+                                                const file = event.target.files[0];
+                                                if (file) {
+                                                    setSelectedChallengeForEdit({ ...selectedChallengeForEdit, imagem: file });
+                                                }
+                                            }} />
+                                    </div>
+
+                                    <button className='cad_button' onClick={() => handleSaveEdit()}>Salvar Alterações</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {selectedChallenge && (
     <div className="modal">
         <div className="modal-content">
@@ -296,8 +391,8 @@ function Cases() {
                                     </button>
                                 </td>
                                 <td className="challenge-actions-cell">
-                                    <button onClick={() => handleEdit(challenge.id)} className="delete-button">
-                                        <img src={EditarIcon} alt="Editar" width="20" />
+                                    <button onClick={() => handleEdit(challenge)} className="alter-button">
+                                        <img src={EditarIcon} alt="Editar" width="30" />
                                     </button>
                                 </td>
                             </tr>

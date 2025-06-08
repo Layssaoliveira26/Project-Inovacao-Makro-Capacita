@@ -1,6 +1,8 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
 
 // Configuração do armazenamento de imagens
 const storage = multer.diskStorage({
@@ -47,18 +49,32 @@ exports.createCase = async (req, res) => {
 
 // Excluir Case 
 exports.excluirCase = async (req, res) => {
-    const { id } = req.params;
-  
-    try {
-      await prisma.cases.delete({
-        where: { id: parseInt(id) }
-      });
-  
-      res.json({ message: 'Case deletado com sucesso.' });
+  const { id } = req.params;
+
+  try {
+      // Buscar o case antes de excluir
+      const cases = await prisma.cases.findUnique({ where: { id: parseInt(id) } });
+
+      if (!cases) {
+        return res.status(404).json({ error: 'Case não encontrado.' });
+      }
+
+      // Se houver imagem associada, excluí-la
+      if (cases.imagem) {
+        const caminhoImagem = path.join(__dirname, '..', 'uploads', cases.imagem);
+          fs.unlink(caminhoImagem, (err) => {
+            if (err) console.error(`Erro ao excluir imagem: ${err.message}`);
+          });
+        }
+
+      // Remover o case do banco de dados
+      await prisma.cases.delete({ where: { id: parseInt(id) } });
+
+      res.json({ message: 'Case deletado com sucesso, imagem removida se existia.' });
     } catch (error) {
-      res.status(400).json({ error: 'Erro ao deletar case.' });
+        res.status(400).json({ error: 'Erro ao deletar case.' });
     }
-  };
+};
 
 //Alterar status
 exports.alterarStatusCase = async (req, res) => {
@@ -113,18 +129,36 @@ exports.getCaseById = async (req, res) => {
 
 // Editar case
 exports.updateCase = async (req, res) => {
-  const { id } = req.params;
-  const { titulo, descricao, resumo, status } = req.body;
-  const imagem = req.file ? req.file.filename : null;
-  try {
-      const caseAtualizado = await prisma.cases.update({
-          where: { id: parseInt(id) },
-          data: { titulo, imagem, descricao, resumo, status }
-      });
-      res.json(caseAtualizado);
-    } catch (error) {
-      res.status(400).json({ error: 'Erro ao atualizar case.' });
-    }
+    const { id } = req.params;
+    const { titulo, descricao, resumo, status } = req.body;
+    const imagem = req.file ? req.file.filename : req.body.imagem; // Usa a mesma imagem se nenhuma nova foi enviada
+  
+    try {
+        // Buscar case atual para obter a imagem antiga
+        const caseAtual = await prisma.cases.findUnique({ where: { id: parseInt(id) } });
+  
+        if (!caseAtual) {
+            return res.status(404).json({ error: 'Case não encontrado.' });
+        }
+  
+        // Se houver uma nova imagem e uma imagem antiga, excluir a antiga
+        if (imagem && caseAtual.imagem) {
+            const caminhoImagemAntiga = path.join(__dirname, '..', 'uploads', caseAtual.imagem);
+            fs.unlink(caminhoImagemAntiga, (err) => {
+                if (err) console.error(`Erro ao excluir imagem antiga: ${err.message}`);
+            });
+        }
+  
+        // Atualizar case no banco de dados
+        const caseAtualizado = await prisma.cases.update({
+            where: { id: parseInt(id) },
+            data: { titulo, imagem, descricao, resumo, status },
+        });
+  
+        res.json(caseAtualizado);
+      } catch (error) {
+          res.status(400).json({ error: 'Erro ao atualizar case.' });
+      }
 };
 
 // Exportando o upload de imagem para uso nas rotas

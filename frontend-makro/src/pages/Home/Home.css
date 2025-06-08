@@ -1,42 +1,57 @@
+/* Geral */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
 html, body, #root {
     height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
     font-family: 'Montserrat', sans-serif;
-    margin: 0;
-    /*background-color: #10142F;*/
+    overflow-x: hidden;
 }
 
-.header {
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
+.landing_page {
+    font-family: 'Montserrat', sans-serif;
+    height: 100%;
+    width: 100%;
+    position: relative;
 }
 
+/* Estilização header */
 .tela_home {
     width: 100vw;
     height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
     position: relative;
+    margin: 0;
+}
+
+.header {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
 }
 
 .logo_makro_header {
     position: absolute;
-    top: 50px;
-    left: 20px;
+    top: 30px;
+    left: 60px;
     height: 40px;
     z-index: 10;
 }
 
-.logo_makro_header img{
+.logo_makro_header img {
     width: 150px;
 }
 
 .conteudo_home {
-    margin-bottom: 0;
     margin-top: 1vw;
     display: flex;
     flex-direction: row;
@@ -46,22 +61,19 @@ html, body, #root {
     width: 90%;
     max-width: 1300px;
     gap: 40px;
-    padding-top: 60px; /* Garante que o logo não fique encoberto */
+    padding-top: 60px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .img_representante {
-    height: 80vh;
-    width: auto;
-    max-width: 45%;
-    object-fit: contain;
-    margin-bottom: 0;
-}
+    align-self: flex-start;
 
-.img_representante img{
-    height: 80vh;
-    width: auto;
-    max-width: 40%;
+    height: 75vh;
+    max-width: 60%;
     object-fit: contain;
+    margin-top: 15px;
+    z-index: 1000;
 }
 
 .textos_header {
@@ -99,21 +111,353 @@ html, body, #root {
     color: white;
 }
 
-.btn_header:hover {
-    opacity: 0.9;
-}
-
 .btn_header_white {
     background-color: white;
     color: #10142F;
 }
 
-.btn_header_white:hover {
-    opacity: 0.9;
+.luz_branca {
+    position: absolute;
+    left: 20%;
+    top: 35%;
+    width: 21%;
+    opacity: 0.7;
+    filter: blur(10px);
+    z-index: 1;
 }
 
+/* Seção de Transição */
 .dados_transicao {
-    top: 0;
-    margin-top: 0;
-    width: 130%;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    position: relative;
+    overflow: hidden;
+
 }
+
+.fundo_transicao {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+
+}
+
+.caracteristicas_container {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    gap: 120px;
+    position:absolute;
+    bottom: 0;
+}
+
+.bloco_caracteristicas {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: white;
+    bottom: 0;
+}
+
+.img_caracteristicas {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    bottom: 0;
+}
+
+h4 {
+    font-weight: bold;
+    font-size: 1.6rem;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+}
+
+/* Estilização tela desafios */
+.tela_desafios, .tela_cases {
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%;
+    position: relative;
+    z-index: 5;
+    padding: 60px 20px;
+    color: white;
+}
+
+.titulo_desafios, .titulo_caminhos, .titulo_cases {
+    font-size: 2.7rem;
+    font-weight: 750;
+    margin-bottom: 30px;
+    left: 0;
+    display: flex;
+}
+
+.tela_desafios h3, .tela_cases h3 {
+    margin-left: 110px;
+}
+
+.tela_desafios, .tela_cases {
+  text-align: center;
+}
+
+
+.carousel-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.seta {
+  margin: 0 40px;
+  font-size: 4.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  transition: transform 0.2s;
+}
+
+.seta:hover {
+  transform: scale(1.3);
+  color: #007bff;
+}
+
+.desafios-visiveis {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+.card-desafio {
+
+  border-radius: 10px;
+  padding: 15px;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.card-desafio:hover {
+  transform: translateY(-5px);
+}
+
+.bloco_text_desafios {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.imagem-desafio {
+  width: 340px;
+  height: 350px;
+  border-radius: 8px;
+}
+
+.titulo_bloco_desafio {
+    margin-top: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 550;
+    font-size: 1.2rem;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.descricao_desafios {
+    margin-top: 15px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+}
+
+.btn_detalhes {
+    margin-top: 17px;
+    background-color: #070b2096;
+    color:white;
+    border: 3px solid #ffffffde;
+    border-radius: 17px;
+    cursor: pointer;
+    width: 110px;
+    height: 35px;
+}
+
+/*Estilização da tela sobre a empresa*/
+.tela_sobre_empresa {
+    width: auto;   
+    height: 100vh;
+    margin-top: 0;
+}
+
+.imgs-sobre-empresa, .conteudo_caminhos {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.fundo_empresa{
+    position: relative;
+    width: 100%;
+}
+
+.simbolo_empresa {
+    position: absolute;
+    top: 0;         /* ou ajuste conforme a altura desejada */
+    right: 0;       /* para ficar no canto direito */
+    z-index: 1;     /* acima da imagem de fundo */
+    width: 320px; 
+    opacity: 60%;
+}
+
+.textos_sobre_makro {
+    position: absolute;
+    width: 100%;
+    top: 0;
+}
+
+.titulos_sobre {
+    margin-left: 110px;
+}
+.subtitulo_empresa {
+    left: 0;
+    margin: 0px 0 15px 0;
+    font-size: 2.1rem;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.subtitulo_pilares {
+    margin: 0 0 25px 110px;
+}
+
+.fundo_titulo_makro {
+    background-color: #ED1C24;
+    max-width: 650px;
+}
+
+.titulo_makro {
+    font-size: 3.6rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    line-height: 1.2;
+    font-family: 'Montserrat', sans-serif;
+    
+}
+
+.p_sobre_empresa {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    font-weight:500;
+    font-family: 'Montserrat', sans-serif;
+    text-align: left;
+    margin-left: 110px;
+    margin-bottom: 30px;
+}
+
+.bloco_pilares {
+    margin: 0;
+    width: 100%;
+    display: flex;
+    padding: 0;
+    left: 0;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    gap: 120px;
+}
+
+.p_pilares_empresa {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    font-weight:500;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.bloco_pilares {
+    display: flex;
+}
+
+.img_pilar {
+    width: 200px;
+}
+
+/*Estilização da tela caminhos para inovar*/
+
+.tela_caminhos {
+    width: 100%;
+    display: flex;  
+    height: 100vh;
+    margin-top: 0;
+    background-color: #fff !important; 
+    position: relative;
+}
+
+.textos_sobre_makro {
+    margin-top: 50px;
+}
+
+.fundo_empresa {
+    position: relative;
+    width: 100%;
+}
+
+.lampada_lateral {
+    position: absolute;
+    top: 0;         
+    right: 0;       
+    z-index: 1;     
+    width: 450px; 
+    opacity: 80%;
+}
+
+.conteudo_caminhos {
+    display: flex;
+    padding: 0 60px;
+    align-items: center;
+    justify-content: center;
+}
+
+.conteudo_imagem {
+    margin: 0 60px;
+    text-align: center;
+    justify-content: center;
+}
+
+.conteudo_texto {
+    margin: 0 60px 30px;
+}
+
+.h5_inovacao {
+    font-size: 1.4rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    color: #EC1C24;
+}
+
+.img_parceiros {
+    width: 430px;
+
+}
+
+.p_descricao_caminhos {
+    font-size: 1.1rem;
+    font-weight:450;
+    font-family: 'Montserrat', sans-serif;
+    color: #333131;
+}
+
+.titulo_caminhos {
+    color: #0C144C;
+}
+
