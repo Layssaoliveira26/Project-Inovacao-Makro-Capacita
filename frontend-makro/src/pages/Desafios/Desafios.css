@@ -170,7 +170,7 @@ input{
 
 .expand-button {
     font-size: 1.5rem;
-    width: 40px;
+    width: 50px;
     height: 40px;
     border-radius: 50%;
     color: #ED1C24;
@@ -318,7 +318,7 @@ input{
 }
 
 .icon-button img {
-    width: 40px;
+    width: 60px;
     /* tamanho pequeno */
     height: 40px;
     object-fit: contain;
@@ -429,14 +429,11 @@ table {
 }
 
 .delete-button img {
-    width: 45px;
-    height: 45px;
+    width: 35px;
+    height: 35px;
 }
 
-.alter-button {
-    width: 120px;
-    height: 120px;
-}
+
 
 .status-button {
     background: none;
@@ -445,8 +442,8 @@ table {
 }
 
 .status-button img {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
 }
 
 .status-badge.ativo {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 import Logo from '../../assets/logo_makro.png';
 import Representante from '../../assets/representante_makro.png';
 import Transicao from '../../assets/fundo_transicao.png';
@@ -34,8 +35,12 @@ function Home() {
                         <div className='textos_header'>
                             <h1>Programa de<br />Inovação</h1>
                             <div className='botoes_header'>
+                                <a href="#tela_desafios">
                                 <button className='btn_header'>Conheça Nossos Desafios</button>
+                                </a>
+                                <a href="">
                                 <button className='btn_header_white'>Entre em Contato</button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -62,7 +67,7 @@ function Home() {
             </div>
             
             {/* Seção de Desafios */}
-            <div className='tela_desafios'>
+            <div id='tela_desafios'>
                 <div className='texto_desafio'>
                     <h3 className='titulo_desafios'>Desafios Makro Engenharia</h3>
                 </div>

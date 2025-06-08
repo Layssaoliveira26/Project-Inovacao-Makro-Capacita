@@ -139,7 +139,7 @@ function Cases() {
                                 <td className='name-challenge-cell' data-label="Senha:">{usuario.email}</td>
                                 <td>
                                     <button onClick={() => handleDelete(usuario.id)} className="del-button">
-                                        <img src={DeleteIcon} alt="Deletar" width="40" />
+                                        <img src={DeleteIcon} alt="Deletar" width="35" />
                                     </button>
                                 </td>
                             </tr>

@@ -182,7 +182,7 @@ h4 {
 }
 
 /* Estilização tela desafios */
-.tela_desafios, .tela_cases {
+#tela_desafios, .tela_cases {
     top: 0;
     left: 0;
     width: 100%;
@@ -201,11 +201,11 @@ h4 {
     display: flex;
 }
 
-.tela_desafios h3, .tela_cases h3 {
+#tela_desafios h3, .tela_cases h3 {
     margin-left: 110px;
 }
 
-.tela_desafios, .tela_cases {
+#tela_desafios, .tela_cases {
   text-align: center;
 }
 
