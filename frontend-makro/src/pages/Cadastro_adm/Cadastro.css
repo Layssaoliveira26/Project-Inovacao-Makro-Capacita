@@ -1,4 +1,3 @@
-
 .navbar-cadastro {
     display: flex;
     justify-content: space-between;
@@ -11,6 +10,10 @@
 
 .tr_users {
     align-items: center;
+}
+
+.delete-button {
+    width: 35px;
 }
 
 

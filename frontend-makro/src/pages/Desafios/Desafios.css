@@ -446,3 +446,43 @@ td.challenge-status-cell, td.challenge-actions-cell {
     align-items: center;  /* Centraliza os ícones verticalmente */
     justify-content: center;
 }
+
+@media (max-width: 800px) {
+
+    tbody tr {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+    }
+    /* Permitir quebra de linha para melhor adaptação */
+    td {
+        white-space: normal;
+        word-wrap: break-word;
+        flex-grow: 1; /* Ajuste para tornar as células mais flexíveis */
+        min-width: auto;
+        text-align: center;
+        padding: 8px;
+    }
+
+    /* Reduzindo largura mínima da descrição */
+    .solution-row-2 td:nth-child(3) {
+        min-width: 300px;
+        max-width: 100%;
+    }
+
+    /* Ajustar alinhamento vertical dos botões */
+    td.challenge-actions-cell {
+        display: flex;
+        flex-direction: column; /* Alinha botões verticalmente */
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    /* Ajustar tamanho dos botões */
+    .status-button, .delete-button, .alter-button {
+        width: 35px;
+        height: 35px;
+    }
+}

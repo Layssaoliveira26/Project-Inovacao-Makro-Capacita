@@ -1,16 +1,8 @@
-import React, { useState } from 'react';
-import Case1 from '../assets/desafio1.png'
-import Case2 from '../assets/desafio2.png'
-import Case3 from '../assets/desafio3.png'
+import React, { useEffect, useState } from 'react';
+import api from '../services/api'
 
-const cases = [
-    { titulo: 'Projeto 1', descricao: 'Descrição breve do desafio 1 com limite de caracteres. Aqui deverá ser escrito o texto que representa o case.', imagem: Case1 },
-    { titulo: 'Projeto 2', descricao: 'Descrição breve do desafio 1 com limite de caracteres. Aqui deverá ser escrito o texto que representa o case.', imagem: Case2 },
-    { titulo: 'Projeto 3', descricao: 'Descrição breve do desafio 1 com limite de caracteres. Aqui deverá ser escrito o texto que representa o case.', imagem: Case1 }
-
-];
-
-const Home = () => {
+function Home() {
+    const [cases, setCases] = useState([]);
     const [indiceAtual, setIndiceAtual] = useState(0);
     const casesPorPagina = 3;
 
@@ -26,6 +18,15 @@ const Home = () => {
         }
     }
 
+    async function getCases() {
+      const response = await api.get('/case/ativos')
+      setCases(response.data)
+    }
+
+    useEffect(() => {
+      getCases()
+    }, [])
+
     const casesVisiveis = cases.slice(indiceAtual, indiceAtual + casesPorPagina);
 
       return (
@@ -35,7 +36,11 @@ const Home = () => {
         <div className="desafios-visiveis">
           {casesVisiveis.map((item, index) => (
             <div className="card-desafio" key={index}>
-              <img src={item.imagem} alt={item.titulo} className="imagem-desafio" />
+              <img 
+                src={`http://localhost:3000/uploads/${encodeURIComponent(item.imagem)}`}
+                alt={item.titulo} 
+                className="imagem-desafio" 
+              />
               <div className='bloco_text_desafios'>
                 <h5 className='titulo_bloco_desafio'>{item.titulo}</h5>
                 <p className='descricao_desafios'>{item.descricao}</p>

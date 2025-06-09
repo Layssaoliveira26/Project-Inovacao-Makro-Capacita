@@ -89,7 +89,7 @@ function Cases() {
             </header>
 
             <div className="header-desafios">
-                <h2>Cadastro de Usuários</h2>
+                <h2>Usuários</h2>
                 <button className="open-modal-btn" onClick={() => setShowModal(true)}>Cadastrar Usuário</button>
             </div>
 
