@@ -32,12 +32,15 @@ function Cases() {
     }, []);
 
     const handleDelete = async (id) => {
-        try {
-            await api.delete(`/usuarios/${id}`);
-            setUsuarios(usuarios.filter(usuarios => usuarios.id !== id));
-            console.log(`Usuário com ID ${id} excluído com sucesso!`);
-        } catch (error) {
-            console.error("Erro ao excluir usuário:", error.response?.data || error.message);
+        const confirmDelete = window.confirm("Tem certeza de que deseja excluir este usuário?");
+        if(confirmDelete) {
+            try {
+                await api.delete(`/usuarios/${id}`);
+                setUsuarios(usuarios.filter(usuarios => usuarios.id !== id));
+                console.log(`Usuário com ID ${id} excluído com sucesso!`);
+            } catch (error) {
+                console.error("Erro ao excluir usuário:", error.response?.data || error.message);
+            }
         }
     };
 
@@ -139,7 +142,7 @@ function Cases() {
                                 <td className='name-challenge-cell' data-label="Senha:">{usuario.email}</td>
                                 <td>
                                     <button onClick={() => handleDelete(usuario.id)} className="del-button">
-                                        <img src={DeleteIcon} alt="Deletar" width="40" />
+                                        <img src={DeleteIcon} alt="Deletar" width="40" title='Deletar' />
                                     </button>
                                 </td>
                             </tr>

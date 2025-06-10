@@ -72,12 +72,15 @@ function Desafios() {
     };
 
     const handleDelete = async (id) => {
-        try {
-            await api.delete(`/desafios/${id}`);
-            setChallenges(challenges.filter(challenge => challenge.id !== id));
-            console.log(`Desafio com ID ${id} excluído com sucesso!`);
-        } catch (error) {
-            console.error("Erro ao excluir desafio:", error.response?.data || error.message);
+        const confirmDelete = window.confirm("Tem certeza de que deseja excluir este desafio?");
+        if(confirmDelete) {
+            try {
+                await api.delete(`/desafios/${id}`);
+                setChallenges(challenges.filter(challenge => challenge.id !== id));
+                console.log(`Desafio com ID ${id} excluído com sucesso!`);
+            } catch (error) {
+                console.error("Erro ao excluir desafio:", error.response?.data || error.message);
+            }
         }
     };
 
@@ -382,17 +385,17 @@ function Desafios() {
                                 </td>
                                 <td className="challenge-status-cell">
                                     <button onClick={() => handleToggleStatus(challenge.id, challenge.status)} className="status-button">
-                                        <img src={AlterarIcon} alt="Alterar Status" width="20" />
-                                    </button>
-                                </td>
-                                <td className="challenge-actions-cell">
-                                    <button onClick={() => handleDelete(challenge.id)} className="delete-button">
-                                        <img src={DeleteIcon} alt="Deletar" width="20" />
+                                        <img src={AlterarIcon} alt="Alterar Status" width="20" title='Alterar status' />
                                     </button>
                                 </td>
                                 <td className="challenge-actions-cell">
                                     <button onClick={() => handleEdit(challenge)} className="alter-button">
-                                        <img src={EditarIcon} alt="Editar" width="30" />
+                                        <img src={EditarIcon} alt="Editar" width="30" title='Editar' />
+                                    </button>
+                                </td>                                
+                                <td className="challenge-actions-cell">
+                                    <button onClick={() => handleDelete(challenge.id)} className="delete-button">
+                                        <img src={DeleteIcon} alt="Deletar" width="20" title='Deletar' />
                                     </button>
                                 </td>
                             </tr>
