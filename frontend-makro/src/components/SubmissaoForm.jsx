@@ -1,5 +1,9 @@
 "use client"
 import "./SubmissaoForm.css"
+import { useRef } from 'react';
+import api from '../services/api'
+
+
 const desafios = [
     "Desafio 1",
     "Desafio 2",
@@ -10,11 +14,14 @@ const desafios = [
     "Desafio 7",
     "Desafio 8"
 ]
-const SubmissaoForm = ({ onSubmit, onClose }) => {
+function SubmissaoForm ({ onSubmit, onClose }) { 
+
     const handleSubmit = (e) => {
         e.preventDefault()
         if (onSubmit) onSubmit()
     }
+
+
     return (
         <div className="form-container">
             <button className="modal-close" onClick={onClose}>
@@ -31,6 +38,10 @@ const SubmissaoForm = ({ onSubmit, onClose }) => {
                     <div className="form-group">
                         <label htmlFor="nome">Nome Completo</label>
                         <input type="text" id="nome" name="nome" />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="nome">Nome do projeto</label>
+                        <input type="text" id="nomeProjeto" name="nomeProjeto" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="email">E-mail</label>

@@ -545,7 +545,7 @@ span {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 800px) {
     .solutions-container {
         padding: 1rem;
     }

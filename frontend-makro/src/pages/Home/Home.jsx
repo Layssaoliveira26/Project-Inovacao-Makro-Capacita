@@ -27,6 +27,7 @@ import DesafioModal from '../../components/DesafioModal';
 import './Home.css';
 import React, { useState } from 'react';
 import api from '../../services/api'
+import ContactFormSection from '../../components/ContactFormSection';
 
 function Home() {
     const areas = [
@@ -196,6 +197,7 @@ function Home() {
                 </div>
                 <CaseCarousel />
             </div>
+            <ContactFormSection />
         </div>
     )
 }
