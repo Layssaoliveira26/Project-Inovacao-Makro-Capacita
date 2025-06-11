@@ -3,6 +3,7 @@ import './Cadastro.css'
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import Logo from '../../assets/logo_makro.png';
+import Logout from "../../assets/logout.png"
 import DeleteIcon from '../../assets/delete.png';
 import { Link } from 'react-router-dom';
 
@@ -45,6 +46,10 @@ function Cases() {
         }
     };
 
+    const handleLogout = () => {
+        window.location.href = "/login_adm"
+    }
+
     const handleCadastroUsuario = async () => {
         try {
             const response = await api.post('/usuarios', {
@@ -79,18 +84,14 @@ function Cases() {
                         <a href="/solucoes_adm" className="nav-link">Submissões</a>
                         <a href="/contatos_adm" className="nav-link">Contatos</a>
                         <a href="/desafios_adm" className="nav-link">Desafios</a>
-                        <a href="/cases_adm" className="nav-link active">Usuários</a>
-                        <a href="/cadastro_adm" className="nav-link">Cadastro usuários</a>
+                        <a href="/cases_adm" className="nav-link">Cases de Sucesso</a>
+                        <a href="/cadastro_adm" className="nav-link active">Cadastro usuários</a>
                     </div>
                 </div>
                 <div className="navbar-right">
-                    <div className="user-icon">
-                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="20" cy="20" r="19" stroke="white" strokeWidth="2" />
-                            <circle cx="20" cy="15" r="6" stroke="white" strokeWidth="2" />
-                            <path d="M7 32C7 25.9249 12.9249 21 20 21C27.0751 21 33 25.9249 33 32" stroke="white" strokeWidth="2" />
-                        </svg>
-                    </div>
+                    <button className="logout-button" onClick={handleLogout}>
+                        <img src={Logout || "/placeholder.svg"} alt="Logout" className="logout-image" />
+                    </button>
                 </div>
             </header>
 
