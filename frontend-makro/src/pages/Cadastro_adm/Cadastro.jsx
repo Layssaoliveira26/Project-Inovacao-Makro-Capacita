@@ -33,12 +33,15 @@ function Cases() {
     }, []);
 
     const handleDelete = async (id) => {
-        try {
-            await api.delete(`/usuarios/${id}`);
-            setUsuarios(usuarios.filter(usuarios => usuarios.id !== id));
-            console.log(`Usuário com ID ${id} excluído com sucesso!`);
-        } catch (error) {
-            console.error("Erro ao excluir usuário:", error.response?.data || error.message);
+        const confirmDelete = window.confirm("Tem certeza de que deseja excluir este usuário?");
+        if(confirmDelete) {
+            try {
+                await api.delete(`/usuarios/${id}`);
+                setUsuarios(usuarios.filter(usuarios => usuarios.id !== id));
+                console.log(`Usuário com ID ${id} excluído com sucesso!`);
+            } catch (error) {
+                console.error("Erro ao excluir usuário:", error.response?.data || error.message);
+            }
         }
     };
 

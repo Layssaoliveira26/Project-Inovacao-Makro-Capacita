@@ -39,6 +39,7 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+    color: black important!;
 }
 .form-row {
     display: flex;
@@ -53,6 +54,7 @@
     display: flex;
     flex-direction: column;
     gap: 5px;
+    color: black;
 }
 .form-group label {
     font-weight: 600;
@@ -161,4 +163,8 @@
     .file-upload-btn {
         max-width: 100%;
     }
+}
+
+#nome, #nomeProjeto, #celular, #email, #descricao{
+    color: black;
 }

@@ -1,6 +1,8 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
+
+
 // Formatador de datas
 function formatDate(date) {
   return new Date(date).toLocaleDateString('pt-BR');
