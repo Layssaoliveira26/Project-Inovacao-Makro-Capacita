@@ -1,5 +1,6 @@
 import '../Desafios/Desafios.css';
 import Logo from '../../assets/logo_makro.png';
+import Logout from "../../assets/logout.png"
 import '../Login_Adm/Login.css';
 import Imagem from '../../assets/imagem 1.png';
 import DeleteIcon from '../../assets/delete.png';
@@ -54,6 +55,10 @@ function Cases() {
     setSelectedChallengeForEdit(challenge);
     setShowEditModal(true);
     };
+
+    const handleLogout = () => {
+        window.location.href = "/login_adm"
+    }
 
     const handleToggleStatus = async (id, currentStatus) => {
         try {
@@ -182,13 +187,9 @@ function Cases() {
                     </div>
                 </div>
                 <div className="navbar-right">
-                    <div className="user-icon">
-                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="20" cy="20" r="19" stroke="white" strokeWidth="2" />
-                            <circle cx="20" cy="15" r="6" stroke="white" strokeWidth="2" />
-                            <path d="M7 32C7 25.9249 12.9249 21 20 21C27.0751 21 33 25.9249 33 32" stroke="white" strokeWidth="2" />
-                        </svg>
-                    </div>
+                    <button className="logout-button" onClick={handleLogout}>
+                        <img src={Logout || "/placeholder.svg"} alt="Logout" className="logout-image" />
+                    </button>
                 </div>
             </header>
 

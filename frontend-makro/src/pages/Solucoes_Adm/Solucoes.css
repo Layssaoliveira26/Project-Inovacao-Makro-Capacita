@@ -72,7 +72,9 @@ body {
 
 .navbar-right {
     display: flex;
-    align-items: center;
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+    height: 100%; /* Garante que ocupe toda a altura da barra de navegação */
 }
 
 .user-icon {
@@ -851,4 +853,10 @@ span {
     .expand-button {
         position: relative;
     }
+}
+
+.logout-image {
+    width: 24px; /* Ajuste para o tamanho desejado */
+    height: 24px; /* Mantém proporção */
+    object-fit: contain; /* Garante que a imagem se ajusta sem distorção */
 }
