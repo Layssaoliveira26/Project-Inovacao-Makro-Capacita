@@ -3,6 +3,7 @@ import { useState } from 'react';
 import './login.css';
 import Logo from '../../assets/logo_makro.png';
 import api from '../../services/api';
+import { Link } from 'react-router-dom'
 
 function Login() {
     const navigate = useNavigate();
@@ -24,7 +25,9 @@ function Login() {
     return (
         <div className='container_geral'>
             <div className='logo_makro'>
-                    <img src={Logo} alt='Makro Logo' />
+                    <Link to='/'>
+                        <img src={Logo || "/placeholder.svg"} alt="Makro Logo" className="logo-image" />
+                    </Link>
             </div>
             <div className='tela_login'>
                 <div className='bloco_login'>
@@ -45,7 +48,7 @@ function Login() {
                             onChange={e => setSenha(e.target.value)}
                         />
                     </div>
-                    {erro && <p style={{ color: 'red' }}>{erro}</p>}
+                    {erro && <p style={{ color: 'red', fontSize: '1.1rem' }}>{erro}</p>}
                     <button className='enter_btn' onClick={handleLogin}>
                         Entrar
                     </button>

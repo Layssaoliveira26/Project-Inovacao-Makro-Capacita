@@ -1,92 +1,227 @@
 "use client";
 import "./SubmissaoForm.css";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import api from "../services/api";
 
-function SubmissaoForm({ onSubmit, onClose, desafioId }) {
-  const inputNome = useRef();
-  const inputNomeProjeto = useRef();
-  const inputCelular = useRef();
-  const inputEmail = useRef();
-  const inputDescricao = useRef();
+function SubmissaoForm({ onSubmit, onClose, desafioId, desafioTitulo }) {
+    // Refs para os campos do formulário
+    const inputNome = useRef(null);
+    const inputNomeProjeto = useRef(null);
+    const inputCelular = useRef(null);
+    const inputEmail = useRef(null);
+    const inputDescricao = useRef(null);
+    
+    // Estados do componente
+    const [erro, setErro] = useState(null);
+    const [carregando, setCarregando] = useState(false);
+    const [desafioIdAtual, setDesafioIdAtual] = useState(null);
+    const [desafioTitleAtual, setDesafioTitleAtual] = useState(null);
 
-  async function createSubmition() {
-    try {
-      // Criando objeto JSON com os dados do formulário
-      const payload = {
-        nome: inputNome.current.value,
-        nomeProjeto: inputNomeProjeto.current.value,
-        telefone: inputCelular.current.value,
-        email: inputEmail.current.value,
-        descricao: inputDescricao.current.value,
-        desafioId: desafioId,
-      };
+    // Efeito para verificar o desafioId recebido
+    useEffect(() => {
+        console.group("[SubmissaoForm] Verificação inicial");
+        console.log("DesafioID recebido:", desafioId);
+        console.log("Tipo do ID:", typeof desafioId);
+        console.log("Título do desafio", desafioTitleAtual)
+        console.groupEnd();
 
-      // Enviando o JSON diretamente — axios já define o Content-Type para application/json automaticamente
-      await api.post("/submissoes", payload);
-    } catch (err) {
-      console.error("Erro ao enviar submissão:", err);
-      console.log("Detalhes do erro:", err.response?.data);
-      alert("Erro ao enviar submissão. Verifique os dados.");
-    }
-  }
+        if (!desafioId) {
+            console.error("Erro: Nenhum desafioId recebido");
+            setErro("Nenhum desafio associado. Por favor, feche e abra novamente o formulário.");
+        } else {
+            setDesafioIdAtual(Number(desafioId));
+            setErro(null);
+        }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await createSubmition();
-    if (onSubmit) onSubmit();
-  };
+        if(!desafioTitulo) {
+            console.error("Erro: Nenhum desafioTitle recebido")
+            setErro("Nenhum desafio associado. Por favor, feche e abra novamente o formulário.");
+        } else {
+            setDesafioTitleAtual(desafioTitulo)
+        }
+    }, [desafioId, desafioTitulo]);
+        
 
-  return (
-    <div className="form-container">
-      <button className="modal-close" onClick={onClose}>
-        ×
-      </button>
-      <div className="form-header">
-        <h1 className="form-title">Submissão de Soluções Inovadoras</h1>
-        <p className="form-subtitle">
-          Preencha sua proposta de forma rápida e segura e contribua com ideias transformadoras.
-        </p>
-      </div>
-      <form className="submission-form" onSubmit={handleSubmit}>
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="nome">Nome Completo</label>
-            <input type="text" id="nome" name="nome" ref={inputNome} required />
-          </div>
-          <div className="form-group">
-            <label htmlFor="nomeProjeto">Nome do projeto</label>
-            <input type="text" id="nomeProjeto" name="nomeProjeto" ref={inputNomeProjeto} required />
-          </div>
-        </div>
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="celular">Celular</label>
-            <input type="tel" id="celular" name="celular" ref={inputCelular} required />
-          </div>
-          <div className="form-group">
-            <label htmlFor="email">E-mail</label>
-            <input type="email" id="email" name="email" ref={inputEmail} required />
-          </div>
-        </div>
-        <div className="form-group">
-          <label htmlFor="descricao">Descrição da Proposta:</label>
-          <textarea id="descricao" name="descricao" rows="4" ref={inputDescricao} required />
-        </div>
-        <div className="form-group documento-group">
-          <div className="form-group">
-            <label htmlFor="documento">Documento da Proposta</label>
-            <button type="button" className="file-upload-btn" disabled>
-              Anexar Arquivo (desativado)
+    // Função para validar e enviar o formulário
+    const createSubmition = async () => {
+        if (!desafioIdAtual) {
+            throw new Error("ID do desafio não definido. Não é possível enviar.");
+        }
+
+        // Validação dos campos
+        const campos = [
+            { ref: inputNome, nome: "Nome Completo" },
+            { ref: inputNomeProjeto, nome: "Nome do Projeto" },
+            { ref: inputCelular, nome: "Celular" },
+            { ref: inputEmail, nome: "E-mail" },
+            { ref: inputDescricao, nome: "Descrição" }
+        ];
+
+        const camposInvalidos = campos.filter(campo => !campo.ref.current?.value?.trim());
+        
+        if (camposInvalidos.length > 0) {
+            throw new Error(`Preencha os campos obrigatórios: ${camposInvalidos.map(c => c.nome).join(", ")}`);
+        }
+
+        // Preparar payload
+        const payload = {
+            nome: inputNome.current.value.trim(),
+            nomeProjeto: inputNomeProjeto.current.value.trim(),
+            telefone: inputCelular.current.value.trim(),
+            email: inputEmail.current.value.trim(),
+            descricao: inputDescricao.current.value.trim(),
+            desafioId: desafioIdAtual
+        };
+
+        console.log("Enviando payload:", payload);
+        return await api.post("/submissoes", payload);
+    };
+
+    // Manipulador de envio do formulário
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setErro(null);
+        setCarregando(true);
+
+        try {
+            await createSubmition();
+            alert("Formulário enviado com sucesso!");
+            if (onSubmit) onSubmit();
+        } catch (error) {
+            console.error("Erro na submissão:", {
+                message: error.message,
+                stack: error.stack,
+                response: error.response?.data
+            });
+            
+            setErro(error.message || "Erro ao enviar formulário. Tente novamente.");
+        } finally {
+            setCarregando(false);
+        }
+    };
+
+    return (
+        <div className="form-container">
+            <button className="modal-close" onClick={onClose}>
+                ×
             </button>
-          </div>
+            
+            <div className="form-header">
+                <h1 className="form-title">Submissão de Soluções Inovadoras</h1>
+                <p className="form-subtitle">
+                    Preencha sua proposta de forma rápida e segura e contribua com ideias transformadoras.
+                </p>
+            </div>
+
+            {erro && (
+                <div className="error-message">
+                    <div className="error-content">
+                        <span className="error-icon">⚠️</span>
+                        <span>{erro}</span>
+                    </div>
+                    <button 
+                        onClick={() => setErro(null)} 
+                        className="error-close-btn"
+                    >
+                        Fechar
+                    </button>
+                </div>
+            )}
+
+            <form className="submission-form" onSubmit={handleSubmit}>
+                <div className="form-row">
+                    <div className="form-group">
+                        <label htmlFor="nome">Nome Completo *</label>
+                        <input 
+                            type="text" 
+                            id="nome" 
+                            name="nome" 
+                            ref={inputNome} 
+                            required 
+                            disabled={carregando}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="nomeProjeto">Nome do projeto *</label>
+                        <input 
+                            type="text" 
+                            id="nomeProjeto" 
+                            name="nomeProjeto" 
+                            ref={inputNomeProjeto} 
+                            required 
+                            disabled={carregando}
+                        />
+                    </div>
+                </div>
+                
+                <div className="form-row">
+                    <div className="form-group">
+                        <label htmlFor="celular">Celular *</label>
+                        <input 
+                            type="tel" 
+                            id="celular" 
+                            name="celular" 
+                            ref={inputCelular} 
+                            required 
+                            disabled={carregando}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="email">E-mail *</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            ref={inputEmail} 
+                            required 
+                            disabled={carregando}
+                        />
+                    </div>
+                </div>
+                
+                <div className="form-group">
+                    <label htmlFor="descricao">Descrição da Proposta *</label>
+                    <textarea 
+                        id="descricao" 
+                        name="descricao" 
+                        rows="4" 
+                        ref={inputDescricao} 
+                        required 
+                        disabled={carregando}
+                    />
+                </div>
+                
+                <div className="form-group documento-group">
+                    <div className="form-group">
+                        <label htmlFor="documento">Documento da Proposta (Opcional)</label>
+                        <button 
+                            type="button" 
+                            className="file-upload-btn" 
+                            disabled
+                        >
+                            Anexar Arquivo (em breve)
+                        </button>
+                    </div>
+                </div>
+                
+                <div className="form-actions">
+                    <button 
+                        type="submit" 
+                        className="submit-button"
+                        disabled={carregando || !desafioIdAtual}
+                    >
+                        {carregando ? (
+                            <span className="loading-text">
+                                <span className="loading-dots">.</span>
+                                <span className="loading-dots">.</span>
+                                <span className="loading-dots">.</span>
+                            </span>
+                        ) : "Enviar"}
+                    </button>
+                </div>
+            </form>
         </div>
-        <div className="form-actions">
-          <button type="submit" className="submit-button">Enviar</button>
-        </div>
-      </form>
-    </div>
-  );
+    );
 }
 
 export default SubmissaoForm;

@@ -4,6 +4,7 @@ import "./Contatos.css"
 import Logo from "../../assets/logo_makro.png"
 import Logout from "../../assets/logout.png"
 import api from "../../services/api"
+import { Link } from 'react-router-dom'
 
 function Contatos() {
     const [selectedSolution, setSelectedSolution] = useState(null)
@@ -131,7 +132,9 @@ function Contatos() {
             <header className="navbar">
                 <div className="navbar-left">
                     <div className="logo-container">
-                        <img src={Logo || "/placeholder.svg"} alt="Makro Logo" className="logo-image" />
+                        <Link to='/'>
+                            <img src={Logo || "/placeholder.svg"} alt="Makro Logo" className="logo-image" />
+                        </Link>
                     </div>
                     <div className="nav-links-container">
                         <a href="/solucoes_adm" className="nav-link">Submissões</a>

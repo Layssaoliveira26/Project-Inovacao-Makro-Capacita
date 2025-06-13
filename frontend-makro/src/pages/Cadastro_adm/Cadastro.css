@@ -28,3 +28,10 @@
     justify-content: center; /* Centraliza horizontalmente */
     height: 100%; /* Garante que ocupe toda a altura da barra de navegação */
 }
+
+.area_confirmacao {
+    margin-top: 10px;
+    justify-content: center;
+    text-align: center;
+    font-size: 1.1rem;
+}

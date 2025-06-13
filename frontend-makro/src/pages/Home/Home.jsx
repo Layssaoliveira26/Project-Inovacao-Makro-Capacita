@@ -24,6 +24,7 @@ import CimenteriaIcon from '../../assets/cimenteria.png';
 import PapelCeluloseIcon from '../../assets/papel-celulose.png';
 import OperacoesPortuariasIcon from '../../assets/operacoes-portuarias.png';
 import DesafioModal from '../../components/DesafioModal';
+import { Link } from 'react-router-dom'
 import './Home.css';
 import React, { useState } from 'react';
 import api from '../../services/api'
@@ -60,7 +61,9 @@ function Home() {
             <div className='tela_home'>
                 <div className='header'>
                     <div className="logo_makro_header">
-                        <img src={Logo} alt="Makro Logo" />
+                        <Link to='/'>
+                            <img src={Logo || "/placeholder.svg"} alt="Makro Logo" className="logo-image" />
+                        </Link>
                     </div>
 
                     <div className='conteudo_home'>
@@ -73,8 +76,9 @@ function Home() {
                                 <a href='#tela_desafios'>
                                     <button className='btn_header'>Conheça Nossos Desafios</button>
                                 </a>
-                                
+                                <a href='#contact-form-section'>
                                 <button className='btn_header_white'>Entre em Contato</button>
+                                </a>
                             </div>
                         </div>
                     </div>

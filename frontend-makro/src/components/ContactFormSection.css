@@ -1,4 +1,4 @@
-.contact-form-section {
+#contact-form-section {
     background: 0 4px 10px rgba(0, 0, 0, 0.1);
     background-image: url("/assets/barra_azul.jpg");
     background-size: cover;
@@ -12,7 +12,7 @@
 }
 
 
-.contact-form-section::before {
+#contact-form-section::before {
     content: "";
     position: absolute;
     top: 0;
@@ -309,7 +309,7 @@
 }
 
 @media (max-width: 768px) {
-    .contact-form-section {
+    #contact-form-section {
         padding: 20px 15px;
     }
 

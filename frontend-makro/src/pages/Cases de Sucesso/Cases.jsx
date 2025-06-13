@@ -7,6 +7,7 @@ import DeleteIcon from '../../assets/delete.png';
 import AlterarIcon from '../../assets/alterar.png';
 import EditarIcon from '../../assets/editar.png';
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'
 import api from '../../services/api';
 
 function Cases() {
@@ -176,7 +177,9 @@ function Cases() {
             <header className="navbar-cadastro">
                 <div className="navbar-left">
                     <div className="logo-container">
+                        <Link to='/'>
                         <img src={Logo || "/placeholder.svg"} alt="Makro Logo" className="logo-image" />
+                        </Link>
                     </div>
                     <div className="nav-links-container">
                         <a href="/solucoes_adm" className="nav-link">Submissões</a>

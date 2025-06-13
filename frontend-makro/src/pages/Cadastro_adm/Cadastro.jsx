@@ -12,9 +12,12 @@ function Cases() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [erroSenha, setErroSenha] = useState('')
+ 
 
     const [emailUsuario, setEmailUsuario] = useState('');
     const [senhaUsuario, setSenhaUsuario] = useState('');
+    const [confirmSenha, setConfirmSenha] = useState('');
 
     async function fetchUsuarios() {
         try {
@@ -51,6 +54,12 @@ function Cases() {
     }
 
     const handleCadastroUsuario = async () => {
+
+        if (senhaUsuario !== confirmSenha) {
+            setErroSenha("As senhas informadas são distintas")
+            return
+        }
+
         try {
             const response = await api.post('/usuarios', {
                 email: emailUsuario,
@@ -63,6 +72,7 @@ function Cases() {
             setShowModal(false);
             setEmailUsuario('');
             setSenhaUsuario('');
+            setConfirmSenha('');
         } catch (error) {
             console.error("Erro ao cadastrar usuário:", error.response?.data || error.message);
         }
@@ -76,7 +86,7 @@ function Cases() {
             <header className="navbar-cadastro">
                 <div className="navbar-left">
                     <div className="logo-container">
-                        <Link to='/login_adm'>
+                        <Link to='/'>
                         <img src={Logo || "/placeholder.svg"} alt="Makro Logo" className="logo-image" />
                         </Link>
                     </div>
@@ -122,6 +132,14 @@ function Cases() {
                                             value={senhaUsuario} onChange={(e) => setSenhaUsuario(e.target.value)} />
                                     </div>
 
+                                    <h3>Confirmação de Senha:</h3>
+                                    <div className='input_desafio'>
+                                        <input type='password' placeholder='Preencha novamente com a senha'
+                                            value={confirmSenha} onChange={(e) => setConfirmSenha(e.target.value)} />
+                                    </div>
+                                    <div className='area_confirmacao'>
+                                    {erroSenha && <p id='p_confirm_senha' style={{ color: 'red'}}>{erroSenha}</p>}
+                                    </div>
                                     <button className='cad_button' onClick={handleCadastroUsuario}>Cadastrar Usuário</button>
                                 </div>
                             </div>
@@ -143,7 +161,7 @@ function Cases() {
                         {usuarios.map((usuario) => (
                             <tr className='tr_users' key={usuario.id}>
                                 <td className='number-user' data-label="Email:">{usuario.id}</td>
-                                <td className='name-challenge-cell' data-label="Senha:">{usuario.email}</td>
+                                <td className='name-challenge-cell' data-label="Email:">{usuario.email}</td>
                                 <td>
                                     <button onClick={() => handleDelete(usuario.id)} className="del-button">
                                         <img src={DeleteIcon} alt="Deletar" width="35" />

@@ -45,7 +45,7 @@ const ContactFormSection = () => {
     };
 
     return (
-        <div className="contact-form-section">
+        <div id="contact-form-section">
             {/* Imagem de fundo na metade superior da tela */}
             <div
                 className="background-image"

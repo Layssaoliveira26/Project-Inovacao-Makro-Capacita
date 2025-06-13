@@ -43,29 +43,46 @@ exports.getAllProjects = async (req, res) => {
 
 // Criar nova submissão
 exports.createProject = async (req, res) => {
+  // Verificação melhorada do desafioId
+  if (!req.body.desafioId || isNaN(Number(req.body.desafioId))) {
+    return res.status(400).json({
+      error: 'desafioId inválido',
+      details: 'O ID do desafio deve ser um número válido',
+      receivedValue: req.body.desafioId
+    });
+  }
+
   const required = ['nome', 'desafioId', 'email', 'telefone', 'descricao', 'nomeProjeto'];
-  const missing = required.filter(f => !req.body[f]);
+  const missing = required.filter(f => !req.body.hasOwnProperty(f) || req.body[f] === null || req.body[f] === '');
 
   if (missing.length > 0) {
     return res.status(400).json({
-      error: 'Campos obrigatórios faltando',
+      error: 'Campos obrigatórios faltando ou inválidos',
       missingFields: missing,
-      details: `Faltam: ${missing.join(', ')}`
+      details: `Os seguintes campos são obrigatórios: ${missing.join(', ')}`,
+      receivedData: req.body
     });
   }
 
   try {
+    // Preparação segura dos dados
+    const projectData = {
+      nome: String(req.body.nome || ''),
+      email: String(req.body.email || ''),
+      telefone: String(req.body.telefone || ''),
+      descricao: String(req.body.descricao || ''),
+      nomeProjeto: String(req.body.nomeProjeto || ''),
+      status: "Em análise",
+      desafioOrigem: { connect: { id: Number(req.body.desafioId) } }
+    };
+
+    // Adiciona documento apenas se existir
+    if (req.body.documento) {
+      projectData.documento = String(req.body.documento);
+    }
+
     const newProject = await prisma.submissao.create({
-      data: {
-        nome: String(req.body.nome),
-        email: String(req.body.email),
-        telefone: String(req.body.telefone),
-        descricao: String(req.body.descricao),
-        documento: req.body.documento ? String(req.body.documento) : null,
-        nomeProjeto: String(req.body.nomeProjeto),
-        status: req.body.status || "Em análise",
-        desafioOrigem: { connect: { id: parseInt(req.body.desafioId) } }
-      },
+      data: projectData,
       include: {
         desafioOrigem: {
           select: { id: true, titulo: true }
@@ -74,23 +91,25 @@ exports.createProject = async (req, res) => {
     });
 
     res.status(201).json({
-      id: newProject.id,
-      nome: newProject.nome,
-      email: newProject.email,
-      telefone: newProject.telefone,
-      descricao: newProject.descricao,
-      documento: newProject.documento,
-      nomeProjeto: newProject.nomeProjeto,
-      status: newProject.status,
-      createdAt: formatDate(newProject.createdAt),
-      desafioId: newProject.desafioOrigem?.id,
-      desafioTitulo: newProject.desafioOrigem?.titulo
+      success: true,
+      data: newProject,
+      message: 'Submissão criada com sucesso'
     });
   } catch (error) {
-    console.error('[ERROR] Erro ao criar projeto:', error);
-    res.status(500).json({ error: 'Erro interno ao criar projeto', details: error.message });
+    console.error('[ERROR] Erro ao criar projeto:', {
+      error: error.message,
+      stack: error.stack,
+      receivedData: req.body
+    });
+
+    res.status(500).json({ 
+      error: 'Erro interno ao criar projeto', 
+      details: process.env.NODE_ENV === 'development' ? error.message : 'Erro no servidor',
+      ...(process.env.NODE_ENV === 'development' && { stack: error.stack })
+    });
   }
 };
+
 
 // Buscar submissão por ID
 exports.getSubmissaoById = async (req, res) => {

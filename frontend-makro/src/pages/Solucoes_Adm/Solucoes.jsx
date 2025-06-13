@@ -4,6 +4,7 @@ import "./Solucoes.css"
 import Logo from "../../assets/logo_makro.png"
 import Logout from "../../assets/logout.png"
 import api from "../../services/api"
+import { Link } from 'react-router-dom'
 
 function Solucoes() {
     const [selectedSolution, setSelectedSolution] = useState(null)
@@ -30,6 +31,7 @@ function Solucoes() {
         try {
             setIsLoading(true)
             const response = await api.get("/submissoes")
+            console.log("Submissões recebidas:", response.data)
 
             const formattedSolutions = response.data.map((submissao) => ({
                 id: submissao.id,
@@ -39,10 +41,9 @@ function Solucoes() {
                 projectName: submissao.nomeProjeto || DEFAULT_VALUES.projectName,
                 status: submissao.status || DEFAULT_VALUES.status,
                 receiptDate: submissao.createdAt
-                    ? new Date(submissao.createdAt).toLocaleDateString("pt-BR")
-                    : DEFAULT_VALUES.receiptDate,
+                    || DEFAULT_VALUES.receiptDate,
                 description: submissao.descricao || DEFAULT_VALUES.description,
-                nameChallenge: submissao.desafioOrigem?.titulo || "Desafio não especificado"
+                nameChallenge: submissao.desafioTitulo
             }))
 
             setSolutions(formattedSolutions)
@@ -155,7 +156,9 @@ function Solucoes() {
             <header className="navbar">
                 <div className="navbar-left">
                     <div className="logo-container">
-                        <img src={Logo || "/placeholder.svg"} alt="Makro Logo" className="logo-image" />
+                        <Link to='/'>
+                            <img src={Logo || "/placeholder.svg"} alt="Makro Logo" className="logo-image" />
+                        </Link>
                     </div>
                     <div className="nav-links-container">
                         <a href="/solucoes_adm" className="nav-link active">
