@@ -2,7 +2,9 @@
 import { useState, useEffect } from "react"
 import "./Solucoes.css"
 import Logo from "../../assets/logo_makro.png"
-import Logout from "../../assets/logout.png"
+import Logout from "../../assets/logout.png";
+import HamburgerIcon from '../../assets/hamburger.png'; 
+import CloseIcon from '../../assets/close.png';
 import api from "../../services/api"
 import { Link } from 'react-router-dom'
 
@@ -14,7 +16,27 @@ function Solucoes() {
     const [solutions, setSolutions] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState(null)
+    const [showSidebar, setShowSidebar] = useState(false);
+    
+    const handleViewDocument = async (documento) => {
+    try {
+        if (!documento) throw new Error("Nenhum documento disponível");
 
+        // Garante que o nome do arquivo está correto (remove '/uploads/' se existir)
+        const filename = documento.replace('/uploads/', '');
+
+        // Verificação de segurança (opcional, mas recomendado)
+        if (!filename.startsWith('doc-')) {
+        throw new Error("Formato de arquivo inválido");
+        }
+
+        // Abre o PDF em uma nova aba
+        window.open(`http://localhost:3000/api/submissoes/documentos/${filename}`, '_blank');
+        
+    } catch (error) {
+        alert(`Erro ao abrir: ${error.message}`);
+    }
+    };
     // Valores padrão
     const DEFAULT_VALUES = {
         projectName: "*NOME DO PROJETO*",
@@ -43,7 +65,8 @@ function Solucoes() {
                 receiptDate: submissao.createdAt
                     || DEFAULT_VALUES.receiptDate,
                 description: submissao.descricao || DEFAULT_VALUES.description,
-                nameChallenge: submissao.desafioTitulo
+                nameChallenge: submissao.desafioTitulo,
+                documento: submissao.documento
             }))
 
             setSolutions(formattedSolutions)
@@ -148,6 +171,22 @@ function Solucoes() {
         }
     }
 
+    const handleToggleSidebar = () => {
+        setShowSidebar(!showSidebar);
+    };
+
+    useEffect(() => {
+        if (showSidebar) {
+            document.body.classList.add('sidebar-open');
+        } else {
+            document.body.classList.remove('sidebar-open');
+        }
+        // Limpeza ao desmontar o componente
+        return () => {
+            document.body.classList.remove('sidebar-open');
+        };
+    }, [showSidebar]);
+
     if (isLoading) return <div className="loading">Carregando...</div>
     if (error) return <div className="error">{error}</div>
 
@@ -160,6 +199,9 @@ function Solucoes() {
                             <img src={Logo || "/placeholder.svg"} alt="Makro Logo" className="logo-image" />
                         </Link>
                     </div>
+                    <button className="hamburger-button" onClick={handleToggleSidebar}>
+                        <img src={HamburgerIcon} alt="Menu" />
+                    </button>                      
                     <div className="nav-links-container">
                         <a href="/solucoes_adm" className="nav-link active">
                             Submissões
@@ -184,6 +226,24 @@ function Solucoes() {
                     </button>
                 </div>
             </header>
+
+            {/* Sidebar (Barra Lateral) */}
+            {showSidebar && (
+                <div className="sidebar-overlay" onClick={handleToggleSidebar}>
+                    <div className={`sidebar ${showSidebar ? 'open' : ''}`} onClick={(e) => e.stopPropagation()}>
+                        <button className="close-sidebar-button" onClick={handleToggleSidebar}>
+                            <img src={CloseIcon} alt="Fechar Menu" />
+                        </button>
+                        <div className="sidebar-links">
+                            <Link to="/solucoes_adm" className="sidebar-link" onClick={handleToggleSidebar}>Submissões</Link>
+                            <Link to="/contatos_adm" className="sidebar-link" onClick={handleToggleSidebar}>Contatos</Link>
+                            <Link to="/desafios_adm" className="sidebar-link" onClick={handleToggleSidebar}>Desafios</Link>
+                            <Link to="/cases_adm" className="sidebar-link" onClick={handleToggleSidebar}>Cases de Sucesso</Link>
+                            <Link to="/cadastro_adm" className="sidebar-link" onClick={handleToggleSidebar}>Cadastro usuários</Link>
+                        </div>
+                    </div>
+                </div>
+            )}            
 
             <h2>Submissões</h2>
 
@@ -273,6 +333,21 @@ function Solucoes() {
                             <div className="detail-row">
                                 <span className="detail-label">Data de Recebimento:</span>
                                 <span className="detail-value">{selectedSolution.receiptDate}</span>
+                            </div>
+                            <div className="detail-row">
+                                <span className="detail-label">Documento:</span>
+                                <span className="detail-value">
+                                    {selectedSolution.documento ? (
+                                    <button 
+                                        onClick={() => handleViewDocument(selectedSolution.documento)}
+                                        className="download-button"
+                                    >
+                                        Baixar Documento
+                                    </button>
+                                    ) : (
+                                    "Nenhum documento enviado"
+                                    )}
+                                </span>
                             </div>
                         </div>
                         <div className="description-title">Descrição da proposta</div>

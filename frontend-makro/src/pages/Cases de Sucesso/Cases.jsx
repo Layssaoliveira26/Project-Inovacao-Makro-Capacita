@@ -1,14 +1,16 @@
 import '../Desafios/Desafios.css';
 import Logo from '../../assets/logo_makro.png';
-import Logout from "../../assets/logout.png"
+import Logout from "../../assets/logout.png";
+import HamburgerIcon from '../../assets/hamburger.png'; 
+import CloseIcon from '../../assets/close.png';
 import '../Login_Adm/Login.css';
 import Imagem from '../../assets/imagem 1.png';
 import DeleteIcon from '../../assets/delete.png';
 import AlterarIcon from '../../assets/alterar.png';
 import EditarIcon from '../../assets/editar.png';
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'
 import api from '../../services/api';
+import { Link } from 'react-router-dom'
 
 function Cases() {
     const [challenges, setChallenges] = useState([]);
@@ -19,6 +21,7 @@ function Cases() {
     const [showModal, setShowModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedChallengeForEdit, setSelectedChallengeForEdit] = useState(null);
+    const [showSidebar, setShowSidebar] = useState(false);
 
     // Estados para os campos de cadastro
     const [tituloCase, setTituloCase] = useState('');
@@ -169,6 +172,22 @@ function Cases() {
         }
     };
 
+    const handleToggleSidebar = () => {
+        setShowSidebar(!showSidebar);
+    };
+
+    useEffect(() => {
+        if (showSidebar) {
+            document.body.classList.add('sidebar-open');
+        } else {
+            document.body.classList.remove('sidebar-open');
+        }
+        // Limpeza ao desmontar o componente
+        return () => {
+            document.body.classList.remove('sidebar-open');
+        };
+    }, [showSidebar]);    
+
     if (isLoading) return <div className="loading">Carregando cases...</div>;
     if (error) return <div className="error">{error}</div>;
 
@@ -178,9 +197,12 @@ function Cases() {
                 <div className="navbar-left">
                     <div className="logo-container">
                         <Link to='/'>
-                        <img src={Logo || "/placeholder.svg"} alt="Makro Logo" className="logo-image" />
+                            <img src={Logo || "/placeholder.svg"} alt="Makro Logo" className="logo-image" />
                         </Link>
                     </div>
+                    <button className="hamburger-button" onClick={handleToggleSidebar}>
+                        <img src={HamburgerIcon} alt="Menu" />
+                    </button>                    
                     <div className="nav-links-container">
                         <a href="/solucoes_adm" className="nav-link">Submissões</a>
                         <a href="/contatos_adm" className="nav-link">Contatos</a>
@@ -195,6 +217,24 @@ function Cases() {
                     </button>
                 </div>
             </header>
+
+            {/* Sidebar (Barra Lateral) */}
+            {showSidebar && (
+                <div className="sidebar-overlay" onClick={handleToggleSidebar}>
+                    <div className={`sidebar ${showSidebar ? 'open' : ''}`} onClick={(e) => e.stopPropagation()}>
+                        <button className="close-sidebar-button" onClick={handleToggleSidebar}>
+                            <img src={CloseIcon} alt="Fechar Menu" />
+                        </button>
+                        <div className="sidebar-links">
+                            <Link to="/solucoes_adm" className="sidebar-link" onClick={handleToggleSidebar}>Submissões</Link>
+                            <Link to="/contatos_adm" className="sidebar-link" onClick={handleToggleSidebar}>Contatos</Link>
+                            <Link to="/desafios_adm" className="sidebar-link" onClick={handleToggleSidebar}>Desafios</Link>
+                            <Link to="/cases_adm" className="sidebar-link" onClick={handleToggleSidebar}>Cases de Sucesso</Link>
+                            <Link to="/cadastro_adm" className="sidebar-link" onClick={handleToggleSidebar}>Cadastro usuários</Link>
+                        </div>
+                    </div>
+                </div>
+            )}            
 
             <div className="header-desafios">
                 <h2>Casos de sucesso</h2>

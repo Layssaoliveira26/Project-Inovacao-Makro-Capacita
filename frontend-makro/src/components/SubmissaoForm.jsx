@@ -10,7 +10,8 @@ function SubmissaoForm({ onSubmit, onClose, desafioId, desafioTitulo }) {
     const inputCelular = useRef(null);
     const inputEmail = useRef(null);
     const inputDescricao = useRef(null);
-    
+    const inputDocumento = useRef(null);
+
     // Estados do componente
     const [erro, setErro] = useState(null);
     const [carregando, setCarregando] = useState(false);
@@ -63,18 +64,31 @@ function SubmissaoForm({ onSubmit, onClose, desafioId, desafioTitulo }) {
             throw new Error(`Preencha os campos obrigatórios: ${camposInvalidos.map(c => c.nome).join(", ")}`);
         }
 
-        // Preparar payload
-        const payload = {
-            nome: inputNome.current.value.trim(),
-            nomeProjeto: inputNomeProjeto.current.value.trim(),
-            telefone: inputCelular.current.value.trim(),
-            email: inputEmail.current.value.trim(),
-            descricao: inputDescricao.current.value.trim(),
-            desafioId: desafioIdAtual
-        };
+        // Criar FormData - substitui o payload que você tinha antes
+        const formData = new FormData();
+        
+        // Adicionar todos os campos que estavam no payload original
+        formData.append('nome', inputNome.current.value.trim());
+        formData.append('nomeProjeto', inputNomeProjeto.current.value.trim());
+        formData.append('telefone', inputCelular.current.value.trim());
+        formData.append('email', inputEmail.current.value.trim());
+        formData.append('descricao', inputDescricao.current.value.trim());
+        formData.append('desafioId', desafioIdAtual);
 
-        console.log("Enviando payload:", payload);
-        return await api.post("/submissoes", payload);
+        // Adicionar o arquivo se existir (nova funcionalidade)
+        if (inputDocumento.current.files && inputDocumento.current.files[0]) {
+            formData.append('documento', inputDocumento.current.files[0]);
+        }
+
+        console.log("Enviando formulário...");
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+        return await api.post("/submissoes", formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data' // Importante para uploads
+            }
+        });
     };
 
     // Manipulador de envio do formulário
@@ -194,13 +208,16 @@ function SubmissaoForm({ onSubmit, onClose, desafioId, desafioTitulo }) {
                 <div className="form-group documento-group">
                     <div className="form-group">
                         <label htmlFor="documento">Documento da Proposta (Opcional)</label>
-                        <button 
-                            type="button" 
+                        <input 
+                            type="file" 
+                            id="documento" 
+                            name="documento" 
+                            ref={inputDocumento} 
                             className="file-upload-btn" 
-                            disabled
-                        >
-                            Anexar Arquivo (em breve)
-                        </button>
+                            accept=".pdf,.doc,.docx,.txt"
+                            disabled={carregando}
+                        />
+
                     </div>
                 </div>
                 

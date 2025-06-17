@@ -8,25 +8,6 @@
         "Helvetica Neue", sans-serif;
 }
 
-.navbar-cadastro {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: #0a0c1b00;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    position: relative;
-    color: white;
-    text-decoration: none;
-    font-size: 1.1rem;
-    transition: color 0.2s;
-    white-space: nowrap;
-    display: flex;
-    gap: 2rem;
-    margin-left: 1rem;
-    padding-top: 1.5rem;
-}
-
 /* html,
 body,
 #root {
@@ -74,23 +55,34 @@ body,
 }
 
 .header-desafios {
-    position: relative;
-    text-align: center;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    padding: 20px 3rem;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 2rem;    /* Adiciona afastamento do topo da página */
+    margin-bottom: 2rem; /* Adiciona afastamento para o elemento abaixo (tabela) */
 }
 
-/* .header-desafios h2 {
-    margin: 0;
-    font-size: 2rem;
-} */
+.header-desafios h2 {
+    flex-grow: 1;
+    text-align: center;
+    margin: 0; /* Importante para o flex-grow funcionar corretamente */
+    padding-top: 0.3rem; /* Reintroduza o padding-top original do h3, se aplicável */
+    padding-bottom: 0.3rem; /* Reintroduza o padding-bottom original do h3, se aplicável */
+}
 
 .header-desafios button {
-    position: absolute;
-    top: 70%;
-    right: 3rem;
-    /* ajuste conforme quiser mais à esquerda */
-    transform: translateY(-50%);
+    margin-left: auto;
+    flex-shrink: 0;
+    /* Seus outros estilos de botão */
+    padding: 0.6rem 1.2rem;
+    background-color: #13193aa8;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 h3 {
@@ -170,7 +162,7 @@ input{
 
 .expand-button {
     font-size: 1.5rem;
-    width: 50px;
+    width: 40px;
     height: 40px;
     border-radius: 50%;
     color: #ED1C24;
@@ -275,7 +267,7 @@ input{
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 1001;
     background-color: rgba(10, 12, 27, 0.8);
 }
 
@@ -318,7 +310,7 @@ input{
 }
 
 .icon-button img {
-    width: 60px;
+    width: 40px;
     /* tamanho pequeno */
     height: 40px;
     object-fit: contain;
@@ -429,11 +421,14 @@ table {
 }
 
 .delete-button img {
-    width: 35px;
-    height: 35px;
+    width: 45px;
+    height: 45px;
 }
 
-
+.alter-button {
+    width: 120px;
+    height: 120px;
+}
 
 .status-button {
     background: none;
@@ -442,8 +437,8 @@ table {
 }
 
 .status-button img {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
 }
 
 .status-badge.ativo {
@@ -461,6 +456,27 @@ td.challenge-status-cell, td.challenge-actions-cell {
     display: flex;
     align-items: center;  /* Centraliza os ícones verticalmente */
     justify-content: center;
+}
+
+/* Estilos padrão para o botão de hambúrguer - ESCONDIDO POR PADRÃO */
+.hamburger-button {
+    display: none; /* <--- ADICIONE OU VERIFIQUE ESTA LINHA */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    margin-left: 20px;
+    z-index: 1001;
+}
+
+.hamburger-button img {
+    width: 30px;
+    height: 30px;
+}
+
+/* Quando a sidebar estiver aberta, esconda o botão de hambúrguer */
+body.sidebar-open .hamburger-button {
+    display: none;
 }
 
 @media (max-width: 800px) {
@@ -512,6 +528,87 @@ td.challenge-status-cell, td.challenge-actions-cell {
         width: 35px;
         height: 35px;
     }
+
+    .nav-links-container {
+        display: none; /* Esconde os links no cabeçalho em telas pequenas */
+    }
+
+    .hamburger-button {
+        display: block; /* Mostra o botão de hambúrguer APENAS em telas pequenas */
+        /* Remova o padding, margin-left, z-index daqui se já estiverem acima */
+    }
+
+    /* ... Resto dos estilos da sidebar dentro desta media query ... */
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.7); /* Fundo escurecido */
+        z-index: 999; /* Abaixo do sidebar, acima do resto da página */
+        display: flex;
+        justify-content: flex-start; /* Alinha o sidebar à esquerda */
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -250px; /* Esconde a sidebar fora da tela por padrão */
+        width: 250px; /* Largura da sidebar */
+        height: 100vh;
+        background-color: #1a2045; /* Cor de fundo da sidebar */
+        padding: 20px;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+        transition: left 0.3s ease-in-out; /* Transição suave */
+        z-index: 1000; /* Acima do overlay */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .sidebar.open {
+        left: 0; /* Move a sidebar para a posição visível */
+    }
+
+    .close-sidebar-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+        align-self: flex-end; /* Alinha o botão de fechar à direita */
+    }
+
+    .close-sidebar-button img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .sidebar-links {
+        display: flex;
+        flex-direction: column;
+        gap: 15px; /* Espaçamento entre os links */
+        margin-top: 30px;
+    }
+
+    .sidebar-link {
+        color: white;
+        text-decoration: none;
+        font-size: 1.1rem;
+        padding: 10px 15px;
+        border-radius: 5px;
+        transition: background-color 0.2s ease;
+    }
+
+    .sidebar-link:hover {
+        background-color: #2a355e;
+    }
+}
+
+/* Fora da responsividade (acima de 800px), esconda o botão de fechar */
+@media (min-width: 801px) {
+  .close-sidebar-button, .sidebar-links {
+    display: none !important;
+  }
 }
 
 .logout-image {

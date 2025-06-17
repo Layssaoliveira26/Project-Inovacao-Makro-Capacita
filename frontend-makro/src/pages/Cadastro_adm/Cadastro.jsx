@@ -3,7 +3,9 @@ import './Cadastro.css'
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import Logo from '../../assets/logo_makro.png';
-import Logout from "../../assets/logout.png"
+import Logout from "../../assets/logout.png";
+import HamburgerIcon from '../../assets/hamburger.png'; 
+import CloseIcon from '../../assets/close.png';
 import DeleteIcon from '../../assets/delete.png';
 import { Link } from 'react-router-dom';
 
@@ -18,6 +20,8 @@ function Cases() {
     const [emailUsuario, setEmailUsuario] = useState('');
     const [senhaUsuario, setSenhaUsuario] = useState('');
     const [confirmSenha, setConfirmSenha] = useState('');
+
+    const [showSidebar, setShowSidebar] = useState(false);
 
     async function fetchUsuarios() {
         try {
@@ -78,6 +82,22 @@ function Cases() {
         }
     };
 
+    const handleToggleSidebar = () => {
+        setShowSidebar(!showSidebar);
+    };
+
+    useEffect(() => {
+        if (showSidebar) {
+            document.body.classList.add('sidebar-open');
+        } else {
+            document.body.classList.remove('sidebar-open');
+        }
+        // Limpeza ao desmontar o componente
+        return () => {
+            document.body.classList.remove('sidebar-open');
+        };
+    }, [showSidebar]);
+        
     if (isLoading) return <div className="loading">Carregando usuários...</div>;
     if (error) return <div className="error">{error}</div>;
 
@@ -90,6 +110,9 @@ function Cases() {
                         <img src={Logo || "/placeholder.svg"} alt="Makro Logo" className="logo-image" />
                         </Link>
                     </div>
+                    <button className="hamburger-button" onClick={handleToggleSidebar}>
+                        <img src={HamburgerIcon} alt="Menu" />
+                    </button>                              
                     <div className="nav-links-container">
                         <a href="/solucoes_adm" className="nav-link">Submissões</a>
                         <a href="/contatos_adm" className="nav-link">Contatos</a>
@@ -104,6 +127,24 @@ function Cases() {
                     </button>
                 </div>
             </header>
+
+            {/* Sidebar (Barra Lateral) */}
+            {showSidebar && (
+                <div className="sidebar-overlay" onClick={handleToggleSidebar}>
+                    <div className={`sidebar ${showSidebar ? 'open' : ''}`} onClick={(e) => e.stopPropagation()}>
+                        <button className="close-sidebar-button" onClick={handleToggleSidebar}>
+                            <img src={CloseIcon} alt="Fechar Menu" />
+                        </button>
+                        <div className="sidebar-links">
+                            <Link to="/solucoes_adm" className="sidebar-link" onClick={handleToggleSidebar}>Submissões</Link>
+                            <Link to="/contatos_adm" className="sidebar-link" onClick={handleToggleSidebar}>Contatos</Link>
+                            <Link to="/desafios_adm" className="sidebar-link" onClick={handleToggleSidebar}>Desafios</Link>
+                            <Link to="/cases_adm" className="sidebar-link" onClick={handleToggleSidebar}>Cases de Sucesso</Link>
+                            <Link to="/cadastro_adm" className="sidebar-link" onClick={handleToggleSidebar}>Cadastro usuários</Link>
+                        </div>
+                    </div>
+                </div>
+            )}            
 
             <div className="header-desafios">
                 <h2>Usuários</h2>
