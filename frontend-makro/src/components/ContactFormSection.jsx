@@ -9,6 +9,7 @@ import whatsappIcon from "../assets/Vector.png";
 import youtubeIcon from "../assets/icons8-youtube-24 1.png";
 import facebookIcon from "../assets/icons8-facebook-50 1.png";
 import locationIcon from "../assets/local.png";
+import { Link } from 'react-router-dom';
 
 const ContactFormSection = () => {
     const handleSubmit = async (e) => {
@@ -161,7 +162,12 @@ const ContactFormSection = () => {
                                 <p>Paupuina, Fortaleza, Ceará</p>
                             </div>
                         </div>
-                    </div>
+                        <div className="area_adm">
+                                <Link className="link_area_adm" to={'/login_adm'}>
+                                <span className="span_area_adm">Área Administrativa</span>
+                                </Link>
+                                </div>
+                        </div>
                 </div>
             </div>
         </div>

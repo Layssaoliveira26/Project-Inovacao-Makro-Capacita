@@ -67,7 +67,7 @@ function SubmissaoForm({ onSubmit, onClose, desafioId, desafioTitulo }) {
         // Criar FormData - substitui o payload que você tinha antes
         const formData = new FormData();
         
-        // Adicionar todos os campos que estavam no payload original
+        // Adicionar todos os campos 
         formData.append('nome', inputNome.current.value.trim());
         formData.append('nomeProjeto', inputNomeProjeto.current.value.trim());
         formData.append('telefone', inputCelular.current.value.trim());
@@ -75,7 +75,6 @@ function SubmissaoForm({ onSubmit, onClose, desafioId, desafioTitulo }) {
         formData.append('descricao', inputDescricao.current.value.trim());
         formData.append('desafioId', desafioIdAtual);
 
-        // Adicionar o arquivo se existir (nova funcionalidade)
         if (inputDocumento.current.files && inputDocumento.current.files[0]) {
             formData.append('documento', inputDocumento.current.files[0]);
         }

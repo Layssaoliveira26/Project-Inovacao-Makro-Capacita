@@ -279,6 +279,21 @@
     line-height: 1.4;
 }
 
+.area_adm {
+    margin-top: 10px;
+    text-align:left;
+}
+
+.span_area_adm{
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.link_area_adm {
+    text-decoration: none;
+    color: white;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
     .section-container {
