@@ -19,23 +19,17 @@ function Solucoes() {
     const [showSidebar, setShowSidebar] = useState(false);
     
     const handleViewDocument = async (documento) => {
-    try {
-        if (!documento) throw new Error("Nenhum documento disponível");
-
-        // Garante que o nome do arquivo está correto (remove '/uploads/' se existir)
-        const filename = documento.replace('/uploads/', '');
-
-        // Verificação de segurança (opcional, mas recomendado)
-        if (!filename.startsWith('doc-')) {
-        throw new Error("Formato de arquivo inválido");
-        }
-
-        // Abre o PDF em uma nova aba
-        window.open(`http://localhost:3000/api/submissoes/documentos/${filename}`, '_blank');
-        
-    } catch (error) {
-        alert(`Erro ao abrir: ${error.message}`);
-    }
+  try {
+    if (!documento) throw new Error("Nenhum documento disponível");
+    const filename = documento.split('/').pop();
+    const documentUrl = `http://localhost:3000/api/documentos/${filename}`;
+    console.log('Tentando abrir:', documentUrl); // Para debug
+    window.open(documentUrl, '_blank');
+    
+  } catch (error) {
+    console.error('Erro ao abrir documento:', error);
+    alert(`Erro ao abrir documento: ${error.message}`);
+  }
     };
     // Valores padrão
     const DEFAULT_VALUES = {
@@ -48,7 +42,6 @@ function Solucoes() {
     // Status disponíveis
     const STATUS_OPTIONS = ["Aguardando análise", "Em análise", "Aprovado", "Reprovado"]
 
-    // Puxar projetos do back-end
     async function getProjects() {
         try {
             setIsLoading(true)

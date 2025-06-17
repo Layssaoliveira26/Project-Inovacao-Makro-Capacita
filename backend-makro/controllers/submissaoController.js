@@ -53,18 +53,18 @@ exports.getAllProjects = async (req, res) => {
       }
     });
 
-    const response = submissoes.map(s => ({
-      id: s.id,
-      nome: s.nome,
-      email: s.email,
-      telefone: s.telefone,
-      descricao: s.descricao,
-      documento: s.documento,
-      nomeProjeto: s.nomeProjeto,
-      status: s.status || "Em análise",
-      createdAt: formatDate(s.createdAt),
-      desafioId: s.desafioOrigem?.id,
-      desafioTitulo: s.desafioOrigem?.titulo || "Desafio não especificado"
+    const response = submissoes.map(submissao => ({ 
+      id: submissao.id,
+      nome: submissao.nome,
+      email: submissao.email,
+      telefone: submissao.telefone,
+      descricao: submissao.descricao,
+      documento: submissao.documento ? submissao.documento : null, 
+      nomeProjeto: submissao.nomeProjeto,
+      status: submissao.status || "Em análise",
+      createdAt: formatDate(submissao.createdAt),
+      desafioId: submissao.desafioOrigem?.id,
+      desafioTitulo: submissao.desafioOrigem?.titulo || "Desafio não especificado"
     }));
 
     res.json(response);
@@ -74,18 +74,27 @@ exports.getAllProjects = async (req, res) => {
   }
 };
 
-//Etapa do documento
+//Listar o documento que vou enviado
 exports.getDocumento = async (req, res) => {
   try {
     const { filename } = req.params;
     const filePath = path.join(__dirname, '../uploads', filename);
     
+    console.log('Tentando acessar arquivo:', filePath); // Para debug
+    
     if (!fs.existsSync(filePath)) {
+      console.error('Arquivo não encontrado:', filename);
       return res.status(404).send('Arquivo não encontrado');
     }
     
-    res.sendFile(filePath);
+    res.sendFile(filePath, {
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `inline; filename="${filename}"`
+      }
+    });
   } catch (error) {
+    console.error('Erro ao recuperar arquivo:', error);
     res.status(500).send('Erro ao recuperar arquivo');
   }
 };
